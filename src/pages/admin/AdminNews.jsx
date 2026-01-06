@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Newspaper, Send, Plus, Trash2, Calendar, User } from 'lucide-react';
+import { Newspaper, Send, Plus, Trash2, Calendar, User, Search } from 'lucide-react';
+import AdminNewsCurator from './components/AdminNewsCurator';
 
 const AdminNews = () => {
     const [news, setNews] = useState([]);
@@ -98,6 +99,10 @@ const AdminNews = () => {
                     </form>
                 </div>
             )}
+
+            {/* News Curator Section */}
+            <AdminNewsCurator />
+
 
             <div className="space-y-4">
                 {news.map((item) => (

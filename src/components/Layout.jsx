@@ -8,6 +8,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isExiting, setIsExiting] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [mediasOpen, setMediasOpen] = useState(false);
     const isHome = pathname === "/";
 
     useEffect(() => {
@@ -25,7 +26,13 @@ const Navbar = () => {
         { name: 'Programme JBR', path: '/programme-jbr' },
         { name: 'La lecture et moi', path: '/lecture-et-moi' },
         { name: 'Partenariat', path: '/partenariat' },
-        { name: 'Médias', path: '/medias' },
+        {
+            name: 'Médias',
+            submenu: [
+                { name: 'Blog', path: '/blog' },
+                { name: 'Actualités', path: '/actualites' }
+            ]
+        },
         { name: 'Contact', path: '/contact' },
     ];
 
@@ -93,14 +100,46 @@ const Navbar = () => {
 
             {/* Desktop Links */}
             <div className="hidden lg:flex gap-6 text-white text-[11px] font-bold items-center text-center">
-                {links.map((link) => (
-                    <button
-                        key={link.path}
-                        onClick={() => handleLinkClick(link.path)}
-                        className={`${pathname === link.path ? 'border-b-2 border-secondary pb-1' : 'hover:text-secondary'} transition-all whitespace-nowrap uppercase cursor-pointer`}
-                    >
-                        {link.name}
-                    </button>
+                {links.map((link, idx) => (
+                    link.submenu ? (
+                        <div
+                            key={idx}
+                            className="relative group"
+                            onMouseEnter={() => setMediasOpen(true)}
+                            onMouseLeave={() => setMediasOpen(false)}
+                        >
+                            <button className="hover:text-secondary transition-all whitespace-nowrap uppercase cursor-pointer flex items-center gap-1">
+                                {link.name}
+                                <i className="fas fa-chevron-down text-[8px]"></i>
+                            </button>
+                            {mediasOpen && (
+                                <div className="absolute top-full left-0 pt-2 z-50">
+                                    <div className="bg-white shadow-2xl rounded-lg overflow-hidden min-w-[180px]">
+                                        {link.submenu.map((sublink) => (
+                                            <button
+                                                key={sublink.path}
+                                                onClick={() => {
+                                                    handleLinkClick(sublink.path);
+                                                    setMediasOpen(false);
+                                                }}
+                                                className={`block w-full text-left px-6 py-3 text-primary hover:bg-secondary hover:text-primary transition-all ${pathname === sublink.path ? 'bg-secondary/20 font-black' : ''}`}
+                                            >
+                                                {sublink.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <button
+                            key={link.path}
+                            onClick={() => handleLinkClick(link.path)}
+                            className={`${pathname === link.path ? 'border-b-2 border-secondary pb-1' : 'hover:text-secondary'} transition-all whitespace-nowrap uppercase cursor-pointer`}
+                        >
+                            {link.name}
+                        </button>
+                    )
                 ))}
                 <button
                     onClick={() => handleLinkClick('/donation')}
@@ -132,15 +171,40 @@ const Navbar = () => {
                         }}
                         className="fixed inset-0 bg-[#002244] flex flex-col justify-center items-center gap-8 lg:hidden z-[105]"
                     >
-                        {links.map((link) => (
-                            <motion.div key={link.path} variants={itemVariants}>
-                                <button
-                                    onClick={() => handleLinkClick(link.path)}
-                                    className={`text-2xl font-black italic tracking-tighter uppercase cursor-pointer ${pathname === link.path ? 'text-secondary' : 'text-white'}`}
-                                >
-                                    {link.name}
-                                </button>
-                            </motion.div>
+                        {links.map((link, idx) => (
+                            link.submenu ? (
+                                <motion.div key={idx} variants={itemVariants} className="text-center">
+                                    <button
+                                        onClick={() => setMediasOpen(!mediasOpen)}
+                                        className="text-2xl font-black italic tracking-tighter uppercase text-white flex items-center gap-2"
+                                    >
+                                        {link.name}
+                                        <i className={`fas fa-chevron-${mediasOpen ? 'up' : 'down'} text-sm`}></i>
+                                    </button>
+                                    {mediasOpen && (
+                                        <div className="mt-4 space-y-3">
+                                            {link.submenu.map((sublink) => (
+                                                <button
+                                                    key={sublink.path}
+                                                    onClick={() => handleLinkClick(sublink.path)}
+                                                    className={`block text-lg font-bold uppercase ${pathname === sublink.path ? 'text-secondary' : 'text-white/70'}`}
+                                                >
+                                                    {sublink.name}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </motion.div>
+                            ) : (
+                                <motion.div key={link.path} variants={itemVariants}>
+                                    <button
+                                        onClick={() => handleLinkClick(link.path)}
+                                        className={`text-2xl font-black italic tracking-tighter uppercase cursor-pointer ${pathname === link.path ? 'text-secondary' : 'text-white'}`}
+                                    >
+                                        {link.name}
+                                    </button>
+                                </motion.div>
+                            )
                         ))}
                         <motion.div variants={itemVariants}>
                             <button

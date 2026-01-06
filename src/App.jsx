@@ -7,6 +7,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import MissionVision from './pages/MissionVision';
 import Medias from './pages/Medias';
+import Blog from './pages/Blog';
+import Actualites from './pages/Actualites';
 import Partenariat from './pages/Partenariat';
 import { JeunesBallonRevesPage, LectureMoiPage } from './pages/Programs';
 
@@ -21,6 +23,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/mission" element={<MissionVision />} />
         <Route path="/medias" element={<Medias />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/actualites" element={<Actualites />} />
         <Route path="/partenariat" element={<Partenariat />} />
         <Route path="/programme-jbr" element={<JeunesBallonRevesPage />} />
         <Route path="/lecture-et-moi" element={<LectureMoiPage />} />

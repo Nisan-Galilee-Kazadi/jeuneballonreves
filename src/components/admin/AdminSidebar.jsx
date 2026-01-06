@@ -7,9 +7,10 @@ const AdminSidebar = ({ activeTab, setActiveTab }) => {
 
     const menuItems = [
         { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
-        { id: 'posts', label: 'Posts (Instagram)', icon: <Camera size={20} /> },
+        { id: 'posts', label: 'Posts (Blog)', icon: <Camera size={20} /> },
         { id: 'news', label: 'Actualités', icon: <Newspaper size={20} /> },
         { id: 'partners', label: 'Partenaires', icon: <Handshake size={20} /> },
+        { id: 'visitors', label: 'Visiteurs', icon: <Mail size={20} /> },
         { id: 'messages', label: 'Messages', icon: <Mail size={20} /> },
     ];
 

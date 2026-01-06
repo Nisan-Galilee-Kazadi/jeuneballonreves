@@ -9,7 +9,7 @@ const AdminPosts = () => {
         title: '',
         caption: '',
         imageUrl: '',
-        type: 'instagram'
+        type: 'blog'
     });
 
     useEffect(() => {
@@ -34,7 +34,7 @@ const AdminPosts = () => {
             if (res.ok) {
                 alert('Post créé avec succès !');
                 setIsCreating(false);
-                setNewPost({ title: '', caption: '', imageUrl: '', type: 'instagram' });
+                setNewPost({ title: '', caption: '', imageUrl: '', type: 'blog' });
                 fetchPosts();
             }
         } catch (err) {
@@ -116,7 +116,7 @@ const AdminPosts = () => {
                                 <button className="hover:text-secondary transition-colors"><Plus size={16} /></button>
                             </div>
                             <div className="absolute bottom-4 left-4 bg-primary text-secondary px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">
-                                {post.type}
+                                Blog
                             </div>
                         </div>
 

@@ -5,6 +5,7 @@ import AdminDashboard from './admin/AdminDashboard';
 import AdminPosts from './admin/AdminPosts';
 import AdminNews from './admin/AdminNews';
 import AdminPartners from './admin/AdminPartners';
+import AdminVisitors from './admin/AdminVisitors';
 import AdminMessages from './admin/AdminMessages';
 
 const Admin = () => {
@@ -20,6 +21,8 @@ const Admin = () => {
                 return <AdminNews />;
             case 'partners':
                 return <AdminPartners />;
+            case 'visitors':
+                return <AdminVisitors />;
             case 'messages':
                 return <AdminMessages />;
             default:
