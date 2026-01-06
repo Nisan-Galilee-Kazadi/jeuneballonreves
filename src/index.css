@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #003366;
+  --color-secondary: #FFCC00;
+  --color-dark-blue: #002244;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: white;
+}
+
+.font-script {
+  font-family: 'Dancing Script', cursive;
+}
+
+/* Custom Utilities */
+.hero-overlay {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+}
+
+.nav-active {
+  border-bottom: 2px solid #FFCC00;
+  padding-bottom: 4px;
+}
+
+.btn-gold {
+  @apply bg-secondary text-primary px-8 py-2 rounded-md font-bold text-sm shadow-lg tracking-widest transition-all cursor-pointer;
+}
+
+.btn-gold:hover {
+  background-color: white;
+}
+
+.btn-blue {
+  background-color: #003366;
+  color: white;
+  padding: 8px 24px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+.btn-blue:hover {
+  opacity: 0.9;
+}
+
+.feature-card {
+  @apply relative rounded-lg overflow-hidden h-44 flex flex-col justify-between p-6 shadow-md;
+}
