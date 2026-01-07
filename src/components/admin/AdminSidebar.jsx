@@ -15,40 +15,41 @@ const AdminSidebar = ({ activeTab, setActiveTab }) => {
     ];
 
     return (
-        <aside className="w-64 bg-primary min-h-screen flex flex-col fixed left-0 top-0 z-[120]">
-            <div className="p-6 border-b border-white/10">
+        <aside className="w-64 bg-primary min-h-screen flex flex-col fixed left-0 top-0 z-[120] lg:relative lg:translate-x-0">
+            <div className="p-4 sm:p-6 border-b border-white/10">
                 <div className="flex items-center gap-3">
-                    <img src="/logo.png" alt="Logo" className="h-8 brightness-0 invert" />
-                    <span className="text-white font-black italic tracking-tighter text-sm uppercase">Admin Panel</span>
+                    <img src="/logo.png" alt="Logo" className="h-8 sm:h-8 brightness-0 invert" />
+                    <span className="text-white font-black italic tracking-tighter text-xs sm:text-sm uppercase hidden sm:block">Admin Panel</span>
                 </div>
             </div>
 
-            <nav className="flex-1 py-6 px-4 space-y-2">
+            <nav className="flex-1 py-4 sm:py-6 px-3 sm:px-4 space-y-2 overflow-y-auto">
                 {menuItems.map((item) => (
                     <button
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${activeTab === item.id
+                        className={`w-full flex items-center justify-between px-3 sm:px-4 py-3 rounded-xl transition-all ${activeTab === item.id
                             ? 'bg-secondary text-primary font-bold shadow-lg'
                             : 'text-white/60 hover:bg-white/5 hover:text-white'
                             }`}
                     >
                         <div className="flex items-center gap-3">
                             {item.icon}
-                            <span className="text-sm">{item.label}</span>
+                            <span className="text-xs sm:text-sm">{item.label}</span>
                         </div>
-                        {activeTab === item.id && <ChevronRight size={16} />}
+                        {activeTab === item.id && <ChevronRight size={14} sm:size={16} />}
                     </button>
                 ))}
             </nav>
 
-            <div className="p-4 border-t border-white/10">
+            <div className="p-3 sm:p-4 border-t border-white/10">
                 <Link
                     to="/"
-                    className="w-full flex items-center gap-3 px-4 py-3 text-white/40 hover:text-red-400 transition-colors text-sm font-bold uppercase tracking-widest"
+                    className="w-full flex items-center gap-3 px-3 sm:px-4 py-3 text-white/40 hover:text-red-400 transition-colors text-xs sm:text-sm font-bold uppercase tracking-widest"
                 >
-                    <LogOut size={18} />
-                    Quitter l'admin
+                    <LogOut size={16} sm:size={18} />
+                    <span className="hidden sm:inline">Quitter l'admin</span>
+                    <span className="sm:hidden">Déconnexion</span>
                 </Link>
             </div>
         </aside>

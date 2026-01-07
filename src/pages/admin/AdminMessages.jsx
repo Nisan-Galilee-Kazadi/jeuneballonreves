@@ -21,10 +21,11 @@ const AdminMessages = () => {
         try {
             const res = await fetch('http://localhost:5000/api/admin/messages');
             const data = await res.json();
-            setMessages(data);
+            setMessages(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error(err);
             alert.error('Erreur lors du chargement des messages');
+            setMessages([]); // S'assurer que messages est toujours un tableau
         } finally {
             setLoading(false);
         }
@@ -195,7 +196,7 @@ const AdminMessages = () => {
         }
     };
 
-    const filteredMessages = messages.filter(msg => {
+    const filteredMessages = (Array.isArray(messages) ? messages : []).filter(msg => {
         const matchesSearch = msg.subject?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             msg.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             msg.message?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -231,13 +232,13 @@ const AdminMessages = () => {
 
     return (
         <div className="h-full bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="flex h-full">
+            <div className="flex flex-col lg:flex-row h-full">
                 {/* Panneau de gauche - Liste des messages */}
-                <div className="w-96 border-r border-slate-200 flex flex-col">
+                <div className={`w-full lg:w-96 border-r border-slate-200 flex flex-col ${selectedMessage ? 'hidden lg:flex' : 'flex'}`}>
                     {/* En-tête de la liste */}
-                    <div className="p-4 border-b border-slate-200 bg-slate-50">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-black text-primary uppercase italic tracking-tighter">
+                    <div className="p-3 sm:p-4 border-b border-slate-200 bg-slate-50">
+                        <div className="flex items-center justify-between mb-3 sm:mb-4">
+                            <h2 className="text-base sm:text-lg font-black text-primary uppercase italic tracking-tighter">
                                 Boîte de réception
                             </h2>
                             <div className="flex items-center gap-2">
@@ -260,12 +261,12 @@ const AdminMessages = () => {
                         </div>
 
                         {/* Filtres */}
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                             {['all', 'unread', 'read', 'starred'].map((f) => (
                                 <button
                                     key={f}
                                     onClick={() => setFilter(f)}
-                                    className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
+                                    className={`px-2 sm:px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
                                         filter === f
                                             ? 'bg-primary text-white'
                                             : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -287,7 +288,7 @@ const AdminMessages = () => {
                                 <div
                                     key={msg._id}
                                     onClick={() => handleSelectMessage(msg)}
-                                    className={`p-4 border-b border-slate-100 cursor-pointer transition-all hover:bg-slate-50 ${
+                                    className={`p-3 sm:p-4 border-b border-slate-100 cursor-pointer transition-all hover:bg-slate-50 ${
                                         selectedMessage?._id === msg._id ? 'bg-primary/5 border-l-4 border-primary' : ''
                                     } ${msg.status === 'unread' ? 'bg-white' : 'bg-slate-50/50'}`}
                                 >
@@ -326,25 +327,25 @@ const AdminMessages = () => {
                                 </div>
                             ))
                         ) : (
-                            <div className="p-8 text-center text-slate-400">
-                                <Mail size={48} className="mx-auto mb-4 opacity-50" />
-                                <p className="text-sm">Aucun message trouvé</p>
+                            <div className="p-6 sm:p-8 text-center text-slate-400">
+                                <Mail size={40} sm:size={48} className="mx-auto mb-4 opacity-50" />
+                                <p className="text-xs sm:text-sm">Aucun message trouvé</p>
                             </div>
                         )}
                     </div>
                 </div>
 
                 {/* Panneau de droite - Lecture du message */}
-                <div className="flex-1 flex flex-col">
+                <div className={`flex-1 flex flex-col ${selectedMessage ? 'flex' : 'hidden lg:flex'}`}>
                     {selectedMessage ? (
                         <>
                             {/* En-tête du message */}
-                            <div className="p-6 border-b border-slate-200 bg-white">
+                            <div className="p-4 sm:p-6 border-b border-slate-200 bg-white">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h1 className="text-xl font-black text-primary">
+                                    <h1 className="text-lg sm:text-xl font-black text-primary truncate pr-2">
                                         {selectedMessage.subject || 'Sans objet'}
                                     </h1>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 flex-shrink-0">
                                         <button
                                             onClick={() => toggleStar(selectedMessage._id)}
                                             className="p-2 text-slate-400 hover:text-yellow-500 transition-colors rounded-lg hover:bg-slate-100"
@@ -376,21 +377,21 @@ const AdminMessages = () => {
                                     </div>
                                 </div>
                                 
-                                <div className="flex items-center gap-4 text-sm text-slate-600">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-slate-600">
                                     <div className="flex items-center gap-2">
                                         <User size={16} />
-                                        <span className="font-medium">{selectedMessage.name}</span>
-                                        <span className="text-slate-400">•</span>
-                                        <a href={`mailto:${selectedMessage.email}`} className="text-primary hover:underline">
+                                        <span className="font-medium truncate">{selectedMessage.name}</span>
+                                        <span className="text-slate-400 hidden sm:inline">•</span>
+                                        <a href={`mailto:${selectedMessage.email}`} className="text-primary hover:underline truncate">
                                             {selectedMessage.email}
                                         </a>
                                     </div>
                                     <div className="flex items-center gap-2 text-slate-400">
                                         <Calendar size={16} />
-                                        <span>{new Date(selectedMessage.createdAt).toLocaleDateString('fr-FR', {
-                                            weekday: 'long',
+                                        <span className="text-xs">{new Date(selectedMessage.createdAt).toLocaleDateString('fr-FR', {
+                                            weekday: 'short',
                                             year: 'numeric',
-                                            month: 'long',
+                                            month: 'short',
                                             day: 'numeric',
                                             hour: '2-digit',
                                             minute: '2-digit'
@@ -400,10 +401,10 @@ const AdminMessages = () => {
                             </div>
 
                             {/* Contenu du message */}
-                            <div className="flex-1 p-6 overflow-y-auto bg-slate-50">
-                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                            <div className="flex-1 p-4 sm:p-6 overflow-y-auto bg-slate-50">
+                                <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100">
                                     <div className="prose prose-sm max-w-none">
-                                        <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
+                                        <p className="text-slate-700 leading-relaxed whitespace-pre-wrap text-sm sm:text-base">
                                             {selectedMessage.message}
                                         </p>
                                     </div>
@@ -411,9 +412,11 @@ const AdminMessages = () => {
 
                                 {/* Section de réponse */}
                                 {replyingTo === selectedMessage._id ? (
-                                    <div className="mt-6 bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                                    <div className="mt-4 sm:mt-6 bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100">
                                         <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-lg font-black text-primary">Répondre à {selectedMessage.name}</h3>
+                                            <h3 className="text-base sm:text-lg font-black text-primary truncate">
+                                                Répondre à {selectedMessage.name}
+                                            </h3>
                                             <button
                                                 onClick={() => {
                                                     setReplyingTo(null);
@@ -428,7 +431,7 @@ const AdminMessages = () => {
                                             value={replyText}
                                             onChange={(e) => setReplyText(e.target.value)}
                                             placeholder="Écrivez votre réponse..."
-                                            className="w-full h-32 p-4 border border-slate-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+                                            className="w-full h-24 sm:h-32 p-3 sm:p-4 border border-slate-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary text-sm"
                                         />
                                         <div className="flex justify-end gap-3 mt-4">
                                             <button
@@ -436,13 +439,13 @@ const AdminMessages = () => {
                                                     setReplyingTo(null);
                                                     setReplyText('');
                                                 }}
-                                                className="px-6 py-2 bg-slate-100 text-slate-600 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-slate-200 transition-all"
+                                                className="px-4 sm:px-6 py-2 bg-slate-100 text-slate-600 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-slate-200 transition-all"
                                             >
                                                 Annuler
                                             </button>
                                             <button
                                                 onClick={sendReply}
-                                                className="px-6 py-2 bg-primary text-white rounded-xl font-black italic uppercase text-xs tracking-widest hover:bg-primary/90 transition-all flex items-center gap-2"
+                                                className="px-4 sm:px-6 py-2 bg-primary text-white rounded-xl font-black italic uppercase text-xs tracking-widest hover:bg-primary/90 transition-all flex items-center gap-2"
                                             >
                                                 <Send size={16} />
                                                 Envoyer
@@ -450,12 +453,12 @@ const AdminMessages = () => {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="mt-6 flex justify-center">
+                                    <div className="mt-4 sm:mt-6 flex justify-center">
                                         <button
                                             onClick={() => setReplyingTo(selectedMessage._id)}
-                                            className="px-6 py-3 bg-primary text-white rounded-xl font-black italic uppercase text-xs tracking-widest hover:bg-primary/90 transition-all flex items-center gap-2 shadow-lg"
+                                            className="px-4 sm:px-6 py-2 sm:py-3 bg-primary text-white rounded-xl font-black italic uppercase text-xs tracking-widest hover:bg-primary/90 transition-all flex items-center gap-2 shadow-lg"
                                         >
-                                            <Reply size={18} />
+                                            <Reply size={16} sm:size={18} />
                                             Répondre
                                         </button>
                                     </div>
@@ -464,9 +467,9 @@ const AdminMessages = () => {
                         </>
                     ) : (
                         <div className="flex-1 flex items-center justify-center bg-slate-50">
-                            <div className="text-center">
-                                <Mail size={64} className="mx-auto text-slate-300 mb-4" />
-                                <p className="text-slate-400 font-medium">Sélectionnez un message pour le lire</p>
+                            <div className="text-center p-6">
+                                <Mail size={48} sm:size={64} className="mx-auto text-slate-300 mb-4" />
+                                <p className="text-slate-400 font-medium text-sm">Sélectionnez un message pour le lire</p>
                             </div>
                         </div>
                     )}

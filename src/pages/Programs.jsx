@@ -63,7 +63,7 @@ export const JeunesBallonRevesPage = () => (
         subtitle="Plateforme de révélation de talents"
         content={[
             "Le projet Jeunes, Ballon et Rêves est une initiative dédiée à la promotion des jeunes talents souvent méconnus, évoluant dans l’ombre.",
-            "L'objectif est de former et révéler les futurs joueurs capables de porter haut les couleurs du Léopard, symbole de l’équipe nationale."
+            "L'objectif est de former et révéler les futurs josueurs capables de porter haut les couleurs du Léopard, symbole de l’équipe nationale."
         ]}
         objectives={[
             "Valoriser les talents méconnus",
