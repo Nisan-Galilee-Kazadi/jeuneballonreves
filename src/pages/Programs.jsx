@@ -1,41 +1,54 @@
 import React from 'react';
 import Layout from '../components/Layout';
+import { Reveal } from '../components/Reveal';
 
 const ProgramDetail = ({ title, subtitle, content, objectives, quote, image }) => (
     <Layout>
         <div className="pt-32 pb-20 px-4 bg-white">
             <div className="max-w-5xl mx-auto space-y-16">
                 <header className="text-center space-y-4">
-                    <h1 className="text-primary text-5xl md:text-7xl font-black italic tracking-tighter uppercase">{title}</h1>
-                    <p className="text-slate-500 font-bold uppercase tracking-[0.3em] text-sm">{subtitle}</p>
+                    <Reveal width="100%" direction="right" delay={3.8}>
+                        <h1 className="text-primary text-5xl md:text-7xl font-black italic tracking-tighter uppercase">{title}</h1>
+                    </Reveal>
+                    <Reveal width="100%" delay={0.4}>
+                        <p className="text-slate-500 font-bold uppercase tracking-[0.3em] text-sm">{subtitle}</p>
+                    </Reveal>
                 </header>
 
                 <div className="grid md:grid-cols-2 gap-12 items-start">
                     <div className="space-y-8">
-                        <div className="prose prose-slate leading-relaxed text-slate-700 text-lg">
-                            {content.map((p, i) => <p key={i}>{p}</p>)}
-                        </div>
+                        <Reveal delay={0.3}>
+                            <div className="prose prose-slate leading-relaxed text-slate-700 text-lg">
+                                {content.map((p, i) => <p key={i}>{p}</p>)}
+                            </div>
+                        </Reveal>
 
-                        <div className="bg-slate-50 p-8 rounded-sm shadow-xl border-t-8 border-secondary">
-                            <h3 className="text-primary text-2xl font-black italic tracking-tighter mb-6 uppercase">Objectifs</h3>
-                            <ul className="space-y-4">
-                                {objectives.map((obj, i) => (
-                                    <li key={i} className="flex gap-4">
-                                        <i className="fas fa-check text-secondary mt-1"></i>
-                                        <span className="font-bold text-slate-700">{obj}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        <Reveal delay={0.4} width="100%">
+                            <div className="bg-slate-50 p-8 rounded-sm shadow-xl border-t-8 border-secondary">
+                                <h3 className="text-primary text-2xl font-black italic tracking-tighter mb-6 uppercase">Objectifs</h3>
+                                <ul className="space-y-4">
+                                    {objectives.map((obj, i) => (
+                                        <li key={i} className="flex gap-4">
+                                            <i className="fas fa-check text-secondary mt-1"></i>
+                                            <span className="font-bold text-slate-700">{obj}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </Reveal>
                     </div>
 
                     <div className="space-y-8">
-                        <img src={image} className="rounded-sm shadow-2xl border-b-8 border-primary w-full" alt={title} />
+                        <Reveal delay={0.5}>
+                            <img src={image} className="rounded-sm shadow-2xl border-b-8 border-primary w-full" alt={title} />
+                        </Reveal>
                         {quote && (
-                            <div className="bg-primary p-10 text-white shadow-2xl relative overflow-hidden">
-                                <i className="fas fa-quote-left absolute top-4 left-4 text-4xl opacity-10"></i>
-                                <p className="text-xl font-script italic leading-relaxed text-secondary">{quote}</p>
-                            </div>
+                            <Reveal delay={0.6} width="100%">
+                                <div className="bg-primary p-10 text-white shadow-2xl relative overflow-hidden">
+                                    <i className="fas fa-quote-left absolute top-4 left-4 text-4xl opacity-10"></i>
+                                    <p className="text-xl font-script italic leading-relaxed text-secondary">{quote}</p>
+                                </div>
+                            </Reveal>
                         )}
                     </div>
                 </div>

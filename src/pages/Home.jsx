@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import { Reveal } from '../components/Reveal';
 import { motion } from 'framer-motion';
 
 const revealUp = {
@@ -81,9 +82,11 @@ const Home = () => {
                     transition={{ duration: 1, ease: "backOut" }}
                     className="flex flex-col items-center max-w-5xl"
                 >
-                    <h1 className="text-white text-4xl md:text-8xl font-black italic tracking-tighter drop-shadow-2xl mb-4 leading-none uppercase">
-                        JEUNES, BALLON & RÊVES
-                    </h1>
+                    <Reveal direction="right" delay={3.8}>
+                        <h1 className="text-white text-4xl md:text-8xl font-black italic tracking-tighter drop-shadow-2xl mb-4 leading-none uppercase">
+                            JEUNES, BALLON & RÊVES
+                        </h1>
+                    </Reveal>
                     <p className="text-white text-xs md:text-lg font-bold italic mb-8 opacity-90 drop-shadow-md">
                         Valorisons les talents d’aujourd’hui pour construire les champions de demain.
                     </p>
@@ -177,6 +180,7 @@ const Home = () => {
                         btnText="Nos objectifs"
                         btnColor="bg-secondary text-primary"
                         colorClass="bg-[#1b4332]"
+                        bgImg="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?auto=format&fit=crop&q=80"
                         path="/mission"
                     />
                     <FeatureCard
@@ -194,7 +198,7 @@ const Home = () => {
                         btnText="Faire un don"
                         btnColor="bg-[#8b0000] text-white"
                         colorClass="bg-[#8a5a44]"
-                        bgImg="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&q=80"
+                        bgImg="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80"
                         path="/donation"
                     />
                     <FeatureCard
@@ -203,6 +207,7 @@ const Home = () => {
                         btnText="Collaborer avec nous"
                         btnColor="bg-[#8b0000] text-white"
                         colorClass="bg-[#3c2f2f]"
+                        bgImg="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80"
                         path="/partenariat"
                     />
                 </div>

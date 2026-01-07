@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, MessageCircle, Send, X } from 'lucide-react';
 import Layout from '../components/Layout';
+import { Reveal } from '../components/Reveal';
 import { getPosts } from '../api';
 
 const Blog = () => {
@@ -175,8 +176,12 @@ const Blog = () => {
             <div className="pt-32 pb-20 px-4 bg-slate-50 min-h-screen">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
-                        <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-4 uppercase">Blog JBR</h1>
-                        <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Nos moments, nos histoires, nos rêves</p>
+                        <Reveal width="100%" direction="right" delay={3.8}>
+                            <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-4 uppercase">Blog JBR</h1>
+                        </Reveal>
+                        <Reveal width="100%" delay={0.4}>
+                            <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Nos moments, nos histoires, nos rêves</p>
+                        </Reveal>
                     </div>
 
                     {loading ? (
@@ -221,91 +226,93 @@ const Blog = () => {
                             <div className="flex-1 max-w-2xl mx-auto lg:mx-0 space-y-8">
                                 {posts.length > 0 ? (
                                     posts.map((post) => (
-                                        <div key={post._id} className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                                            {/* Post Header */}
-                                            <div className="p-4 flex items-center gap-3 border-b border-slate-100">
-                                                <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                                                    <i className="fas fa-futbol text-secondary text-sm"></i>
-                                                </div>
-                                                <div className="flex-1">
-                                                    <p className="font-black text-primary text-sm uppercase italic tracking-tighter">{post.title}</p>
-                                                    <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
-                                                        {new Date(post.createdAt).toLocaleDateString()}
-                                                    </p>
-                                                </div>
-                                                <div className="bg-secondary text-primary px-3 py-1 rounded-full text-[9px] font-black uppercase">
-                                                    Blog
-                                                </div>
-                                            </div>
-
-                                            {/* Post Image */}
-                                            <div className="relative">
-                                                <img src={post.imageUrl} className="w-full h-auto" alt={post.title} />
-                                            </div>
-
-                                            {/* Actions */}
-                                            <div className="p-4 space-y-3">
-                                                <div className="flex items-center gap-4">
-                                                    <button
-                                                        onClick={() => handleLike(post._id)}
-                                                        className="flex items-center gap-2 group"
-                                                    >
-                                                        <Heart
-                                                            size={24}
-                                                            className={`transition-all ${post.isLiked ? 'fill-red-500 text-red-500' : 'text-slate-700 hover:text-red-500'}`}
-                                                        />
-                                                        <span className="text-sm font-bold text-primary">{post.reactions?.likes || 0}</span>
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setShowComments({ ...showComments, [post._id]: !showComments[post._id] })}
-                                                        className="flex items-center gap-2"
-                                                    >
-                                                        <MessageCircle size={24} className="text-slate-700 hover:text-primary transition-colors" />
-                                                        <span className="text-sm font-bold text-primary">{post.comments?.length || 0}</span>
-                                                    </button>
-                                                </div>
-
-                                                {/* Caption */}
-                                                <p className="text-sm text-slate-700 leading-relaxed">
-                                                    <span className="font-black text-primary mr-2">{post.title}</span>
-                                                    {post.caption}
-                                                </p>
-
-                                                {/* Comments Section */}
-                                                {showComments[post._id] && (
-                                                    <div className="space-y-3 pt-3 border-t border-slate-100">
-                                                        {post.comments && post.comments.length > 0 ? (
-                                                            post.comments.map((comment, idx) => (
-                                                                <div key={idx} className="text-sm">
-                                                                    <span className="font-bold text-primary mr-2">{comment.user}</span>
-                                                                    <span className="text-slate-700">{comment.text}</span>
-                                                                </div>
-                                                            ))
-                                                        ) : (
-                                                            <p className="text-xs text-slate-400 italic">Aucun commentaire pour le moment.</p>
-                                                        )}
-
-                                                        {/* Add Comment */}
-                                                        <div className="flex gap-2 pt-2">
-                                                            <input
-                                                                type="text"
-                                                                value={commentInputs[post._id] || ''}
-                                                                onChange={(e) => setCommentInputs({ ...commentInputs, [post._id]: e.target.value })}
-                                                                onKeyPress={(e) => e.key === 'Enter' && handleCommentClick(post._id)}
-                                                                placeholder="Ajouter un commentaire..."
-                                                                className="flex-1 bg-slate-50 border-none rounded-full px-4 py-2 text-sm focus:ring-2 ring-secondary"
-                                                            />
-                                                            <button
-                                                                onClick={() => handleCommentClick(post._id)}
-                                                                className="bg-secondary text-primary p-2 rounded-full hover:bg-primary hover:text-secondary transition-all"
-                                                            >
-                                                                <Send size={18} />
-                                                            </button>
-                                                        </div>
+                                        <Reveal key={post._id} width="100%">
+                                            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                                                {/* Post Header */}
+                                                <div className="p-4 flex items-center gap-3 border-b border-slate-100">
+                                                    <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                                        <i className="fas fa-futbol text-secondary text-sm"></i>
                                                     </div>
-                                                )}
+                                                    <div className="flex-1">
+                                                        <p className="font-black text-primary text-sm uppercase italic tracking-tighter">{post.title}</p>
+                                                        <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
+                                                            {new Date(post.createdAt).toLocaleDateString()}
+                                                        </p>
+                                                    </div>
+                                                    <div className="bg-secondary text-primary px-3 py-1 rounded-full text-[9px] font-black uppercase">
+                                                        Blog
+                                                    </div>
+                                                </div>
+
+                                                {/* Post Image */}
+                                                <div className="relative">
+                                                    <img src={post.imageUrl} className="w-full h-auto" alt={post.title} />
+                                                </div>
+
+                                                {/* Actions */}
+                                                <div className="p-4 space-y-3">
+                                                    <div className="flex items-center gap-4">
+                                                        <button
+                                                            onClick={() => handleLike(post._id)}
+                                                            className="flex items-center gap-2 group"
+                                                        >
+                                                            <Heart
+                                                                size={24}
+                                                                className={`transition-all ${post.isLiked ? 'fill-red-500 text-red-500' : 'text-slate-700 hover:text-red-500'}`}
+                                                            />
+                                                            <span className="text-sm font-bold text-primary">{post.reactions?.likes || 0}</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setShowComments({ ...showComments, [post._id]: !showComments[post._id] })}
+                                                            className="flex items-center gap-2"
+                                                        >
+                                                            <MessageCircle size={24} className="text-slate-700 hover:text-primary transition-colors" />
+                                                            <span className="text-sm font-bold text-primary">{post.comments?.length || 0}</span>
+                                                        </button>
+                                                    </div>
+
+                                                    {/* Caption */}
+                                                    <p className="text-sm text-slate-700 leading-relaxed">
+                                                        <span className="font-black text-primary mr-2">{post.title}</span>
+                                                        {post.caption}
+                                                    </p>
+
+                                                    {/* Comments Section */}
+                                                    {showComments[post._id] && (
+                                                        <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                            {post.comments && post.comments.length > 0 ? (
+                                                                post.comments.map((comment, idx) => (
+                                                                    <div key={idx} className="text-sm">
+                                                                        <span className="font-bold text-primary mr-2">{comment.user}</span>
+                                                                        <span className="text-slate-700">{comment.text}</span>
+                                                                    </div>
+                                                                ))
+                                                            ) : (
+                                                                <p className="text-xs text-slate-400 italic">Aucun commentaire pour le moment.</p>
+                                                            )}
+
+                                                            {/* Add Comment */}
+                                                            <div className="flex gap-2 pt-2">
+                                                                <input
+                                                                    type="text"
+                                                                    value={commentInputs[post._id] || ''}
+                                                                    onChange={(e) => setCommentInputs({ ...commentInputs, [post._id]: e.target.value })}
+                                                                    onKeyPress={(e) => e.key === 'Enter' && handleCommentClick(post._id)}
+                                                                    placeholder="Ajouter un commentaire..."
+                                                                    className="flex-1 bg-slate-50 border-none rounded-full px-4 py-2 text-sm focus:ring-2 ring-secondary"
+                                                                />
+                                                                <button
+                                                                    onClick={() => handleCommentClick(post._id)}
+                                                                    className="bg-secondary text-primary p-2 rounded-full hover:bg-primary hover:text-secondary transition-all"
+                                                                >
+                                                                    <Send size={18} />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
+                                        </Reveal>
                                     ))
                                 ) : (
                                     <div className="text-center py-20 bg-white shadow-inner rounded-lg">
@@ -315,7 +322,7 @@ const Blog = () => {
                             </div>
 
                             {/* Sidebar Animation - Desktop Only - FIXED (never scrolls) */}
-                            <div className="hidden lg:block w-[420px] fixed right-8 top-32 h-[calc(100vh-10rem)]">
+                            < div className="hidden lg:block w-[420px] fixed right-8 top-32 h-[calc(100vh-10rem)]" >
                                 <div className="relative w-full h-full overflow-hidden rounded-3xl bg-linear-to-br from-primary to-primary/80 p-8">
                                     {/* Continuous Floating Balls */}
                                     {[...Array(5)].map((_, i) => (
@@ -344,7 +351,7 @@ const Blog = () => {
 
                                     {/* Content */}
                                     <div className="relative z-10 text-white">
-                                        <h3 className="text-2xl font-black italic tracking-tighter mb-4 uppercase">Jeune Ballon Rêves</h3>
+                                        <h3 className="text-2xl font-black italic tracking-tighter mb-4 uppercase">Jeune, Ballon & Rêves</h3>
                                         <p className="text-sm opacity-80 leading-relaxed mb-6">
                                             Suivez nos aventures, nos victoires et nos moments de partage. Chaque post raconte une histoire unique.
                                         </p>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminSidebar from '../components/admin/AdminSidebar';
 import AdminTopbar from '../components/admin/AdminTopbar';
 import AdminDashboard from './admin/AdminDashboard';
@@ -9,7 +9,13 @@ import AdminVisitors from './admin/AdminVisitors';
 import AdminMessages from './admin/AdminMessages';
 
 const Admin = () => {
-    const [activeTab, setActiveTab] = useState('dashboard');
+    const [activeTab, setActiveTab] = useState(() => {
+        return localStorage.getItem('adminActiveTab') || 'dashboard';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('adminActiveTab', activeTab);
+    }, [activeTab]);
 
     const renderContent = () => {
         switch (activeTab) {

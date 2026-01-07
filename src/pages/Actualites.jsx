@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink } from 'lucide-react';
 import Layout from '../components/Layout';
+import { Reveal } from '../components/Reveal';
 
 const Actualites = () => {
     const [news, setNews] = useState([]);
@@ -25,8 +26,12 @@ const Actualites = () => {
             <div className="pt-32 pb-20 px-4 bg-slate-50 min-h-screen">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
-                        <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-4 uppercase">Actualités Football</h1>
-                        <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Les dernières nouvelles du monde du ballon rond</p>
+                        <Reveal width="100%" direction="right" delay={3.8}>
+                            <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-4 uppercase">Actualités Football</h1>
+                        </Reveal>
+                        <Reveal width="100%" delay={0.4}>
+                            <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Les dernières nouvelles du monde du ballon rond</p>
+                        </Reveal>
                     </div>
 
                     {loading ? (
@@ -68,11 +73,13 @@ const Actualites = () => {
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {news.length > 0 ? (
-                                news.map((item) => (
+                                news.map((item, index) => (
                                     <motion.div
                                         key={item._id}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
+                                        initial={{ opacity: 0, y: 50 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true, margin: "-50px" }}
+                                        transition={{ duration: 0.5, delay: index * 0.1 }}
                                         className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer"
                                         onClick={() => setSelectedNews(item)}
                                     >

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import FloatingBalloons from './FloatingBalloons';
+import EntryBallon from './EntryBallon';
 
 const Navbar = () => {
     const { pathname } = useLocation();
@@ -361,22 +363,8 @@ const Layout = ({ children }) => {
             <Footer />
 
             {/* Background floating balls global decorations */}
-            <div className="fixed inset-0 pointer-events-none -z-10 bg-slate-50">
-                <motion.div
-                    animate={{ y: [0, 100, 0], x: [0, 50, 0], rotate: 360 }}
-                    transition={{ duration: 25, repeat: Infinity }}
-                    className="absolute top-1/4 -right-10 opacity-[0.03]"
-                >
-                    <i className="fas fa-futbol text-[300px] text-primary"></i>
-                </motion.div>
-                <motion.div
-                    animate={{ y: [0, -100, 0], x: [0, -50, 0], rotate: -360 }}
-                    transition={{ duration: 30, repeat: Infinity }}
-                    className="absolute bottom-1/4 -left-10 opacity-[0.03]"
-                >
-                    <i className="fas fa-futbol text-[350px] text-primary"></i>
-                </motion.div>
-            </div>
+            <FloatingBalloons />
+
 
             {/* Enhanced Rolling Loader */}
             <AnimatePresence>
@@ -384,6 +372,8 @@ const Layout = ({ children }) => {
                     <PageLoader onComplete={() => setIsLoading(false)} key="loader" />
                 )}
             </AnimatePresence>
+
+            {!isLoading && <EntryBallon key={`balloon-${pathname}`} />}
         </div>
     );
 };

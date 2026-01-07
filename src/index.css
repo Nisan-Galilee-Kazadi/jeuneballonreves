@@ -49,3 +49,7 @@ body {
 .feature-card {
   @apply relative rounded-lg overflow-hidden h-44 flex flex-col justify-between p-6 shadow-md;
 }
+
+* {
+  outline: none;
+}
