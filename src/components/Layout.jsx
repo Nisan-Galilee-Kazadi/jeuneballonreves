@@ -251,7 +251,7 @@ const Footer = () => (
             </div>
         </div>
         <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-white/5 text-center text-[10px] font-bold opacity-30 tracking-[0.2em] relative z-10">
-            © 2024 Jeunes, Ballon et Rêves. Tous droits réservés.
+            <script>document.write(new Date().getFullYear());</script>Jeunes, Ballon et Rêves. Tous droits réservés.
         </div>
     </footer>
 );

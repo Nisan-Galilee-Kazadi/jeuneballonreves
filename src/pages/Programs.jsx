@@ -59,7 +59,7 @@ const ProgramDetail = ({ title, subtitle, content, objectives, quote, image }) =
 
 export const JeunesBallonRevesPage = () => (
     <ProgramDetail
-        title="Jeunes, Ballon et Rêves"
+        title="Jeunes, Ballon & Rêves"
         subtitle="Plateforme de révélation de talents"
         content={[
             "Le projet Jeunes, Ballon et Rêves est une initiative dédiée à la promotion des jeunes talents souvent méconnus, évoluant dans l’ombre.",
