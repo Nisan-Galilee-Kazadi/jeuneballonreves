@@ -48,12 +48,12 @@ const Admin = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex">
+        <div className="min-h-screen bg-slate-50">
             {/* Sidebar */}
             <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
             {/* Main Content Area */}
-            <div className="flex-1 ml-64 flex flex-col">
+            <div className="ml-64 flex flex-col min-h-screen">
                 <AdminTopbar title={getTitle()} />
 
                 <main className="flex-1 overflow-y-auto">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Camera, Newspaper, Handshake, ChevronRight, LogOut, Mail } from 'lucide-react';
+import { LayoutDashboard, Camera, Newspaper, Handshake, ChevronRight, LogOut, Mail, Users } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const AdminSidebar = ({ activeTab, setActiveTab }) => {
@@ -10,7 +10,7 @@ const AdminSidebar = ({ activeTab, setActiveTab }) => {
         { id: 'posts', label: 'Posts (Blog)', icon: <Camera size={20} /> },
         { id: 'news', label: 'Actualités', icon: <Newspaper size={20} /> },
         { id: 'partners', label: 'Partenaires', icon: <Handshake size={20} /> },
-        { id: 'visitors', label: 'Visiteurs', icon: <Mail size={20} /> },
+        { id: 'visitors', label: 'Visiteurs', icon: <Users size={20} /> },
         { id: 'messages', label: 'Messages', icon: <Mail size={20} /> },
     ];
 

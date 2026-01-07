@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Activity, MessageCircle, Heart, Trash2 } from 'lucide-react';
+import { Globe, Activity, MessageCircle, Heart, Trash2 } from 'lucide-react';
 
 const AdminVisitors = () => {
     const [visitors, setVisitors] = useState([]);
@@ -22,7 +22,7 @@ const AdminVisitors = () => {
             <div className="flex justify-between items-center">
                 <div>
                     <h2 className="text-2xl font-black text-primary uppercase italic tracking-tighter flex items-center gap-3">
-                        <Users className="text-secondary" size={28} />
+                        <Globe className="text-secondary" size={28} />
                         Visiteurs Enregistrés
                     </h2>
                     <p className="text-slate-500 text-sm mt-1">Personnes ayant interagi avec le blog</p>
@@ -93,7 +93,7 @@ const AdminVisitors = () => {
                         ))
                     ) : (
                         <div className="col-span-full text-center py-20 bg-white rounded-2xl shadow-inner">
-                            <Users size={48} className="mx-auto text-slate-300 mb-4" />
+                            <Globe size={48} className="mx-auto text-slate-300 mb-4" />
                             <p className="text-slate-400 italic">Aucun visiteur enregistré pour le moment.</p>
                         </div>
                     )}
