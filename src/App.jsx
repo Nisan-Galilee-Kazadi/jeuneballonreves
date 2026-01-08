@@ -4,6 +4,11 @@ import ScrollToTop from './components/ScrollToTop';
 import AlertProvider from './components/AlertProvider';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminPosts from './pages/admin/AdminPosts';
+import AdminNews from './pages/admin/AdminNews';
+import AdminPartners from './pages/admin/AdminPartners';
+import AdminMessages from './pages/admin/AdminMessages';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import MissionVision from './pages/MissionVision';
@@ -21,6 +26,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/posts" element={<AdminPosts />} />
+          <Route path="/admin/news" element={<AdminNews />} />
+          <Route path="/admin/partners" element={<AdminPartners />} />
+          <Route path="/admin/messages" element={<AdminMessages />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/mission" element={<MissionVision />} />

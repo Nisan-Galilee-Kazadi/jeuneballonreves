@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Newspaper, Send, Plus, Trash2, Calendar, User, Search, Eye, Edit, Save, X } from 'lucide-react';
 import AdminNewsCurator from './components/AdminNewsCurator';
 import { useAlertContext } from '../../components/AlertProvider';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const AdminNews = () => {
     const [news, setNews] = useState([]);
@@ -95,11 +96,12 @@ const AdminNews = () => {
     };
 
     return (
-        <div className="p-8 space-y-8 w-full">
+        <AdminLayout title=" Actualités">
+            <div className="p-4 sm:p-6 lg:p-8 space-y-6">
             <div className="flex justify-between items-center">
                 <button
                     onClick={() => setIsCreating(true)}
-                    className="bg-primary text-secondary px-6 py-3 rounded-xl font-black italic uppercase text-xs tracking-widest flex items-center gap-2 shadow-lg hover:scale-105 transition-all"
+                    className="bg-primary text-secondary px-6 py-3 rounded-xl font-black italic uppercase text-xs tracking-widest flex items-center justify-center gap-2 shadow-lg hover:scale-105 transition-all w-full"
                 >
                     <Plus size={18} /> Nouvelle Actualité
                 </button>
@@ -156,48 +158,47 @@ const AdminNews = () => {
             <AdminNewsCurator />
 
 
-            <div className="space-y-4">
-                {news.map((item) => (
-                    <div key={item._id} className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-6 group hover:shadow-md transition-all">
-                        {item.imageUrl ? (
-                            <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0">
-                                <img src={item.imageUrl} className="w-full h-full object-cover" alt="" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {news.map((article) => (
+                    <div key={article._id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 group relative w-full">
+                        {/* Image en haut */}
+                        <div className="h-48 overflow-hidden relative">
+                            <img src={article.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2 rounded-xl text-primary flex gap-3 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button className="hover:text-orange-500 transition-colors"><Edit size={16} /></button>
+                                <button className="hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
                             </div>
-                        ) : (
-                            <div className="w-24 h-24 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0">
-                                <Newspaper className="text-slate-200" size={32} />
+                            <div className="absolute bottom-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">
+                                {article.category}
                             </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 mb-1">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-secondary bg-primary px-2 py-0.5 rounded-md">{item.category}</span>
-                                <span className="text-[10px] text-slate-400 font-bold flex items-center gap-1"><Calendar size={10} /> {new Date(item.createdAt).toLocaleDateString()}</span>
-                            </div>
-                            <h4 className="text-lg font-bold text-primary truncate hover:text-clip hover:whitespace-normal transition-all">{item.title}</h4>
-                            <p className="text-sm text-slate-500 line-clamp-1 mt-1 font-medium">{item.content}</p>
                         </div>
-                        <div className="flex gap-2">
-                            <button 
-                                onClick={() => handleDelete(item._id)}
-                                className="p-2 text-slate-300 hover:text-red-500 transition-colors"
-                                title="Supprimer"
-                            >
-                                <Trash2 size={18} />
-                            </button>
-                            <button 
-                                onClick={() => handleEdit(item)}
-                                className="p-2 text-slate-300 hover:text-blue-500 transition-colors"
-                                title="Modifier"
-                            >
-                                <Edit size={18} />
-                            </button>
-                            <button 
-                                onClick={() => setViewingItem(item)}
-                                className="p-2 text-slate-300 hover:text-green-500 transition-colors"
-                                title="Voir détail"
-                            >
-                                <Eye size={18} />
-                            </button>
+
+                        {/* Contenu */}
+                        <div className="p-5">
+                            <h4 className="text-sm font-black text-primary uppercase italic tracking-tighter line-clamp-2 mb-2">{article.title}</h4>
+                            <p className="text-slate-500 text-xs line-clamp-2 mb-4 leading-relaxed">{article.content}</p>
+
+                            {/* Boutons en row wrap */}
+                            <div className="flex flex-wrap gap-2">
+                                <button
+                                    onClick={() => setViewingItem(article)}
+                                    className="text-[9px] font-black uppercase tracking-[0.2em] text-orange-500 hover:text-primary transition-colors bg-orange-50 px-2 py-1 rounded-md flex-1 min-w-[80px]"
+                                >
+                                    Détails
+                                </button>
+                                <button 
+                                    onClick={() => handleEdit(article)}
+                                    className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500 hover:text-primary transition-colors bg-blue-50 px-2 py-1 rounded-md flex-1 min-w-[80px]"
+                                >
+                                    Modifier
+                                </button>
+                                <button 
+                                    onClick={() => handleDelete(article._id)}
+                                    className="text-[9px] font-black uppercase tracking-[0.2em] text-red-500 hover:text-primary transition-colors bg-red-50 px-2 py-1 rounded-md flex-1 min-w-[80px]"
+                                >
+                                    Supprimer
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -322,7 +323,8 @@ const AdminNews = () => {
                     </div>
                 </div>
             )}
-        </div>
+            </div>
+        </AdminLayout>
     );
 };
 

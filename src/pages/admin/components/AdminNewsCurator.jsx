@@ -111,8 +111,8 @@ const AdminNewsCurator = () => {
     };
 
     return (
-        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm w-full">
-            <div className="flex justify-between items-center mb-6">
+        <div className="bg-white rounded-3xl p-2 border border-slate-100 shadow-sm w-full">
+            <div className="flex justify-between items-center mb-4">
                 <div>
                     <h2 className="text-xl font-black text-primary uppercase italic tracking-tighter flex items-center gap-2">
                         <Globe className="text-secondary" size={24} />
@@ -144,11 +144,12 @@ const AdminNewsCurator = () => {
                     ))}
                 </div>
             ) : (
-                <div className="space-y-4 overflow-y-auto max-h-[750px] pr-2 scrollbar-thin scrollbar-thumb-slate-200 overflow-x-hidden">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-[750px] pr-2 scrollbar-thin scrollbar-thumb-slate-200">
                     {externalNews.length > 0 ? (
                         externalNews.map((item) => (
-                            <div key={item.id} className="bg-slate-50/50 p-4 rounded-2xl flex gap-6 items-center border border-transparent hover:border-primary/10 hover:bg-white hover:shadow-xl transition-all duration-500 group">
-                                <div className="w-40 h-28 shrink-0 overflow-hidden rounded-xl bg-white border border-slate-100 relative shadow-sm">
+                            <div key={item.id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 group relative w-full h-full min-h-[320px] flex flex-col max-w-sm mx-auto">
+                                {/* Image en haut */}
+                                <div className="h-48 overflow-hidden relative flex-shrink-0">
                                     {item.imageUrl ? (
                                         <img
                                             src={item.imageUrl}
@@ -161,41 +162,36 @@ const AdminNewsCurator = () => {
                                     <div className={`absolute inset-0 items-center justify-center bg-slate-50 text-slate-200 ${item.imageUrl ? 'hidden' : 'flex'}`}>
                                         <Globe size={32} />
                                     </div>
-                                    <div className="absolute top-1.5 left-1.5 bg-primary/80 backdrop-blur-sm text-secondary text-[8px] font-black uppercase px-2 py-0.5 rounded-md">
+                                    <div className="absolute top-4 left-4 bg-primary/80 backdrop-blur-sm text-secondary text-[8px] font-black uppercase px-2 py-0.5 rounded-md">
                                         {item.source}
                                     </div>
+                                    {sourceStatus[item.id] && (
+                                        <div className="absolute top-4 right-4">
+                                            {sourceStatus[item.id].verified ? (
+                                                <div className="bg-green-500 text-white p-1 rounded-full">
+                                                    <Shield size={12} />
+                                                </div>
+                                            ) : (
+                                                <div className="bg-red-500 text-white p-1 rounded-full">
+                                                    <AlertCircle size={12} />
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
 
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-3 mb-1">
+                                {/* Contenu */}
+                                <div className="p-5 flex flex-col flex-grow">
+                                    <div className="flex items-center gap-2 mb-2">
                                         <span className="text-[9px] font-black text-secondary bg-primary px-2 py-0.5 rounded-md uppercase tracking-widest">
                                             {item.category}
                                         </span>
                                         <span className="text-[9px] font-bold text-slate-400">
                                             {new Date(item.date).toLocaleDateString()}
                                         </span>
-                                        {sourceStatus[item.id] && (
-                                            <div className="flex items-center gap-1">
-                                                {sourceStatus[item.id].verified ? (
-                                                    <div className="flex items-center gap-1 text-green-600">
-                                                        <Shield size={12} />
-                                                        <span className="text-[8px] font-bold">Vérifié</span>
-                                                    </div>
-                                                ) : (
-                                                    <div className="flex items-center gap-1 text-red-600">
-                                                        <AlertCircle size={12} />
-                                                        <span className="text-[8px] font-bold">Non vérifié</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
                                     </div>
-                                    <h3 className="text-md font-black text-primary leading-tight mb-1 group-hover:text-secondary transition-colors duration-300 line-clamp-1">
-                                        {item.title}
-                                    </h3>
-                                    <p className="text-xs text-slate-500 line-clamp-2 font-medium leading-relaxed italic mb-3">
-                                        {item.summary}
-                                    </p>
+                                    <h4 className="text-sm font-black text-primary uppercase italic tracking-tighter line-clamp-2 mb-2">{item.title}</h4>
+                                    <p className="text-slate-500 text-xs line-clamp-2 mb-4 leading-relaxed">{item.summary}</p>
                                     
                                     {/* Image Update Section */}
                                     {editingImage === item.id ? (
@@ -228,52 +224,53 @@ const AdminNewsCurator = () => {
                                         </div>
                                     ) : null}
 
-                                    <div className="flex gap-2 flex-wrap">
+                                    {/* Boutons en row wrap */}
+                                    <div className="mt-auto flex flex-wrap gap-2">
                                         <button
                                             onClick={() => handleImport(item)}
                                             disabled={importing === item.id}
-                                            className="bg-primary text-white px-4 py-2 rounded-lg font-black italic uppercase text-[9px] tracking-widest hover:bg-primary/95 transition-all shadow-md flex items-center justify-center gap-1.5 disabled:opacity-50"
+                                            className="text-[9px] font-black uppercase tracking-[0.2em] text-orange-500 hover:text-primary transition-colors bg-orange-50 px-3 py-2 rounded-md flex-1 min-w-[80px] h-10 flex items-center justify-center gap-1 disabled:opacity-50"
                                         >
                                             {importing === item.id ? (
-                                                <RefreshCw size={12} className="animate-spin" />
+                                                <RefreshCw size={10} className="animate-spin" />
                                             ) : (
-                                                <Plus size={12} />
+                                                <Plus size={10} />
                                             )}
-                                            {importing === item.id ? 'Import...' : 'Valider'}
+                                            {importing === item.id ? 'Import...' : 'Importer'}
                                         </button>
                                         <button
                                             onClick={() => verifySource(item)}
                                             disabled={verifyingSource === item.id}
-                                            className="px-4 bg-white border border-slate-100 text-slate-600 py-2 rounded-lg font-bold uppercase text-[9px] tracking-widest hover:bg-slate-50 transition-all flex items-center shadow-sm gap-1 disabled:opacity-50"
+                                            className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500 hover:text-primary transition-colors bg-blue-50 px-3 py-2 rounded-md flex-1 min-w-[80px] h-10 flex items-center justify-center gap-1 disabled:opacity-50"
                                         >
                                             {verifyingSource === item.id ? (
-                                                <RefreshCw size={12} className="animate-spin" />
+                                                <RefreshCw size={10} className="animate-spin" />
                                             ) : (
-                                                <Shield size={12} />
+                                                <Shield size={10} />
                                             )}
                                             Vérifier
                                         </button>
                                         <button
                                             onClick={() => copyToClipboard(item.link)}
-                                            className="px-4 bg-white border border-slate-100 text-slate-600 py-2 rounded-lg font-bold uppercase text-[9px] tracking-widest hover:bg-slate-50 transition-all flex items-center shadow-sm gap-1"
+                                            className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-primary transition-colors bg-slate-50 px-3 py-2 rounded-md flex-1 min-w-[80px] h-10 flex items-center justify-center gap-1"
                                         >
-                                            <Copy size={12} />
+                                            <Copy size={10} />
                                             Copier
                                         </button>
                                         <a
                                             href={item.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="px-4 bg-white border border-slate-100 text-slate-400 py-2 rounded-lg font-bold uppercase text-[9px] tracking-widest hover:bg-slate-50 transition-all flex items-center shadow-sm gap-1"
+                                            className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-500 hover:text-primary transition-colors bg-purple-50 px-3 py-2 rounded-md flex-1 min-w-[80px] h-10 flex items-center justify-center gap-1"
                                         >
-                                            <ExternalLink size={12} />
+                                            <ExternalLink size={10} />
                                             Source
                                         </a>
                                         <button
                                             onClick={() => handleImageUpdate(item)}
-                                            className="px-4 bg-purple-50 border border-purple-200 text-purple-600 py-2 rounded-lg font-bold uppercase text-[9px] tracking-widest hover:bg-purple-100 transition-all flex items-center shadow-sm gap-1"
+                                            className="text-[9px] font-black uppercase tracking-[0.2em] text-green-500 hover:text-primary transition-colors bg-green-50 px-3 py-2 rounded-md flex-1 min-w-[80px] h-10 flex items-center justify-center gap-1"
                                         >
-                                            <Image size={12} />
+                                            <Image size={10} />
                                             Image
                                         </button>
                                     </div>
@@ -281,7 +278,7 @@ const AdminNewsCurator = () => {
                             </div>
                         ))
                     ) : (
-                        <div className="text-center py-12 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+                        <div className="col-span-full text-center py-12 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
                             <Globe className="mx-auto text-slate-200 mb-3" size={48} />
                             <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">
                                 Aucun nouvel article trouvé<br />

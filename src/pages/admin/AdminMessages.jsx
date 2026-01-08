@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Trash2, CheckCircle, Clock, Search, Reply, Forward, Star, Archive, Eye, EyeOff, Send, X, ChevronLeft, User, Calendar } from 'lucide-react';
 import { useAlertContext } from '../../components/AlertProvider';
+import API_ENDPOINTS from '../../config/api';
+import AdminLayout from '../../components/admin/AdminLayout';
 
 const AdminMessages = () => {
     const [messages, setMessages] = useState([]);
@@ -19,7 +21,7 @@ const AdminMessages = () => {
 
     const fetchMessages = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/admin/messages');
+            const res = await fetch(API_ENDPOINTS.admin.messages);
             const data = await res.json();
             setMessages(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -33,7 +35,7 @@ const AdminMessages = () => {
 
     const markAsRead = async (id) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/admin/messages/${id}/status`, {
+            const res = await fetch(`${API_ENDPOINTS.admin.messages}/${id}/status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: 'read' })
@@ -52,7 +54,7 @@ const AdminMessages = () => {
 
     const markAsUnread = async (id) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/admin/messages/${id}/status`, {
+            const res = await fetch(`${API_ENDPOINTS.admin.messages}/${id}/status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: 'unread' })
@@ -72,14 +74,10 @@ const AdminMessages = () => {
     const toggleStar = async (id) => {
         try {
             const message = messages.find(m => m._id === id);
-            if (!message) {
-                alert.error('Message non trouvé dans la liste');
-                return;
-            }
+            if (!message) return;
             
             const newStarredStatus = !message.starred;
-            
-            const res = await fetch(`http://localhost:5000/api/admin/messages/${id}`, {
+            const res = await fetch(`${API_ENDPOINTS.admin.messages}/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ starred: newStarredStatus })
@@ -90,76 +88,71 @@ const AdminMessages = () => {
                 if (selectedMessage && selectedMessage._id === id) {
                     setSelectedMessage({ ...selectedMessage, starred: newStarredStatus });
                 }
-            } else if (res.status === 404) {
-                // Si le message n'existe plus, le retirer de la liste
+            } else {
+                // Si le message n'existe plus (404), on le retire de la liste
                 setMessages(messages.filter(m => m._id !== id));
                 if (selectedMessage && selectedMessage._id === id) {
                     setSelectedMessage(null);
                 }
-                alert.error('Ce message n\'existe plus et a été retiré de la liste');
-            } else {
-                const errorData = await res.json().catch(() => ({}));
-                alert.error(errorData.message || 'Erreur lors du marquage comme important');
+                alert.warning('Message non trouvé sur le serveur');
             }
         } catch (err) {
             console.error(err);
-            alert.error('Erreur réseau lors du marquage comme important');
+            alert.error('Erreur lors du marquage comme important');
         }
     };
 
     const deleteMessage = async (id) => {
-        alert.confirm(
-            'Êtes-vous sûr de vouloir supprimer ce message ?',
-            async () => {
-                try {
-                    const res = await fetch(`http://localhost:5000/api/admin/messages/${id}`, {
-                        method: 'DELETE'
-                    });
-                    if (res.ok) {
-                        setMessages(messages.filter(m => m._id !== id));
-                        if (selectedMessage && selectedMessage._id === id) {
-                            setSelectedMessage(null);
-                        }
-                        alert.success('Message supprimé avec succès');
-                    } else {
-                        alert.error('Erreur lors de la suppression');
-                    }
-                } catch (err) {
-                    console.error(err);
-                    alert.error('Erreur réseau lors de la suppression');
+        try {
+            const res = await fetch(`${API_ENDPOINTS.admin.messages}/${id}`, {
+                method: 'DELETE'
+            });
+            
+            if (res.ok) {
+                setMessages(messages.filter(m => m._id !== id));
+                if (selectedMessage && selectedMessage._id === id) {
+                    setSelectedMessage(null);
                 }
-            },
-            'Confirmation de suppression'
-        );
+                alert.success('Message supprimé avec succès');
+            } else {
+                // Si le message n'existe plus (404), on le retire de la liste
+                setMessages(messages.filter(m => m._id !== id));
+                if (selectedMessage && selectedMessage._id === id) {
+                    setSelectedMessage(null);
+                }
+                alert.warning('Message non trouvé sur le serveur');
+            }
+        } catch (err) {
+            console.error(err);
+            alert.error('Erreur lors de la suppression');
+        }
     };
 
     const archiveMessage = async (id) => {
         try {
-            const res = await fetch(`http://localhost:5000/api/admin/messages/${id}`, {
+            const res = await fetch(`${API_ENDPOINTS.admin.messages}/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ archived: true })
             });
+            
             if (res.ok) {
                 setMessages(messages.filter(m => m._id !== id));
                 if (selectedMessage && selectedMessage._id === id) {
                     setSelectedMessage(null);
                 }
                 alert.success('Message archivé avec succès');
-            } else if (res.status === 404) {
-                // Si le message n'existe plus, le retirer de la liste
+            } else {
+                // Si le message n'existe plus (404), on le retire de la liste
                 setMessages(messages.filter(m => m._id !== id));
                 if (selectedMessage && selectedMessage._id === id) {
                     setSelectedMessage(null);
                 }
-                alert.error('Ce message n\'existe plus et a été retiré de la liste');
-            } else {
-                const errorData = await res.json().catch(() => ({}));
-                alert.error(errorData.message || 'Erreur lors de l\'archivage');
+                alert.warning('Message non trouvé sur le serveur');
             }
         } catch (err) {
             console.error(err);
-            alert.error('Erreur réseau lors de l\'archivage');
+            alert.error('Erreur lors de l\'archivage');
         }
     };
 
@@ -231,10 +224,11 @@ const AdminMessages = () => {
     }
 
     return (
-        <div className="h-full bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+        <AdminLayout title="Messagerie">
+            <div className="h-full bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden w-full max-w-full">
             <div className="flex flex-col lg:flex-row h-full">
                 {/* Panneau de gauche - Liste des messages */}
-                <div className={`w-full lg:w-96 border-r border-slate-200 flex flex-col ${selectedMessage ? 'hidden lg:flex' : 'flex'}`}>
+                <div className={`w-full lg:w-96 border-r border-slate-200 flex flex-col ${selectedMessage ? 'hidden lg:flex' : 'flex'} flex-shrink-0`}>
                     {/* En-tête de la liste */}
                     <div className="p-3 sm:p-4 border-b border-slate-200 bg-slate-50">
                         <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -336,7 +330,7 @@ const AdminMessages = () => {
                 </div>
 
                 {/* Panneau de droite - Lecture du message */}
-                <div className={`flex-1 flex flex-col ${selectedMessage ? 'flex' : 'hidden lg:flex'}`}>
+                <div className={`flex-1 flex flex-col ${selectedMessage ? 'flex' : 'hidden lg:flex'} min-w-0`}>
                     {selectedMessage ? (
                         <>
                             {/* En-tête du message */}
@@ -475,7 +469,8 @@ const AdminMessages = () => {
                     )}
                 </div>
             </div>
-        </div>
+            </div>
+        </AdminLayout>
     );
 };
 
