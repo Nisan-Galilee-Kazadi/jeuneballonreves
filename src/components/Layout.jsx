@@ -329,20 +329,6 @@ const PageLoader = ({ onComplete }) => {
                         ))}
                     </div>
                 </div>
-
-                <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 1.5, delay: 0.2 }}
-                    className="w-full h-[2px] bg-secondary/20 mt-2 origin-left overflow-hidden"
-                >
-                    <motion.div
-                        initial={{ x: "-100%" }}
-                        animate={{ x: "100%" }}
-                        transition={{ duration: 1.5, delay: 0.2 }}
-                        className="w-full h-full bg-secondary"
-                    />
-                </motion.div>
             </div>
         </motion.div>
     );
