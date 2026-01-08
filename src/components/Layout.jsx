@@ -266,7 +266,7 @@ const PageLoader = ({ onComplete }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             onComplete();
-        }, 2500); // Réduit de 3500ms à 2500ms pour plus rapide
+        }, 2000); // Exactement 2 secondes
         return () => clearTimeout(timer);
     }, [onComplete]);
 
