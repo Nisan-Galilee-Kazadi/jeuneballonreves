@@ -10,7 +10,13 @@ const HeroBox = ({ title, subtitle, img, path }) => {
             className="relative h-48 md:h-56 rounded-sm overflow-hidden group shadow-2xl flex flex-col items-stretch cursor-pointer"
         >
             <div className="flex-1 overflow-hidden">
-                <img src={img} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt={title} />
+                <img 
+                    src={img} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                    alt={title}
+                    loading="eager"
+                    decoding="async"
+                />
             </div>
             <div className="bg-[#002244] py-4 px-2 text-center relative">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full">
@@ -28,7 +34,13 @@ const FeatureCard = ({ title, desc, btnText, btnColor, bgImg, colorClass, path }
     const navigate = useNavigate();
     return (
         <div className={`feature-card ${colorClass} z-20`}>
-            {bgImg && <img src={bgImg} className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-multiply" alt="" />}
+            {bgImg && <img 
+                src={bgImg} 
+                className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-multiply" 
+                alt=""
+                loading="eager"
+                decoding="async"
+            />}
             <div className="relative z-10 text-left">
                 <h4 className="text-white text-2xl font-black italic tracking-tighter leading-tight mb-1">{title}</h4>
                 <p className="text-white text-[10px] opacity-90 font-bold max-w-[200px]">{desc}</p>
@@ -53,6 +65,8 @@ const Home = () => {
                         src="/images/hero-football.jpg"
                         className="w-full h-full object-cover"
                         alt="Hero"
+                        loading="eager"
+                        decoding="async"
                     />
                     <div className="absolute inset-0 bg-black/30" />
                 </div>
@@ -99,7 +113,13 @@ const Home = () => {
 
                     <div className="bg-white rounded-sm flex flex-col md:flex-row shadow-2xl max-w-4xl border-t-8 border-primary overflow-hidden">
                         <div className="md:w-1/3 h-64 md:h-auto overflow-hidden relative group">
-                            <img src="/images/presenter.jpg" className="w-full h-full object-cover" alt="Presenter" />
+                            <img 
+                                src="/images/presenter.jpg" 
+                                className="w-full h-full object-cover" 
+                                alt="Presenter"
+                                loading="eager"
+                                decoding="async"
+                            />
                         </div>
                         <div className="flex-1 p-8 md:p-10 text-left flex flex-col justify-center bg-slate-50">
                             <div className="flex items-center gap-4 mb-2">
@@ -203,7 +223,13 @@ const Home = () => {
                                 className="bg-white rounded-sm overflow-hidden shadow-xl border-b-8 border-primary group block cursor-pointer"
                             >
                                 <div className="h-44 relative overflow-hidden">
-                                    <img src={item.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={item.name} />
+                                    <img 
+                                        src={item.img} 
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                                        alt={item.name}
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
                                     <div className="absolute inset-0 bg-primary/20 group-hover:bg-primary/0 transition-colors duration-300" />
                                 </div>
                                 <div className="bg-[#003366] py-4 text-white text-[12px] font-bold tracking-widest italic flex flex-col group-hover:bg-secondary group-hover:text-primary transition-colors duration-300">

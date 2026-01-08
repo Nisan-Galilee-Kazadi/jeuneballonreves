@@ -90,6 +90,6 @@ export const LectureMoiPage = () => (
             "Valoriser la lecture comme levier de réussite"
         ]}
         quote="La lecture n'est pas une contrainte, mais une clé. Elle nous construit aujourd'hui et nous maintient demain."
-        image="/images/lecture.jpg"
+        image="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&q=80"
     />
 );
