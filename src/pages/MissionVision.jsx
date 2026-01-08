@@ -14,7 +14,7 @@ const MissionVision = () => (
                         <Reveal style={{ width: "100%" }} delay={0.3}>
                             <div className="relative overflow-hidden space-y-6 text-lg text-slate-700 leading-relaxed shadow-lg p-8 bg-white border-l-8 border-[#2D5A27]">
                                 <img
-                                    src="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?auto=format&fit=crop&q=80"
+                                    src="/images/mission-vision.jpg"
                                     className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none"
                                     alt=""
                                 />
@@ -30,7 +30,7 @@ const MissionVision = () => (
                             </div>
                         </Reveal>
                         <Reveal delay={0.4}>
-                            <img src="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?auto=format&fit=crop&q=80" className="rounded-lg shadow-2xl" alt="Mission" />
+                            <img src="/images/mission-vision.jpg" className="rounded-lg shadow-2xl" alt="Mission" />
                         </Reveal>
                     </div>
                 </section>
@@ -38,7 +38,7 @@ const MissionVision = () => (
                 <section>
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         <Reveal delay={0.3}>
-                            <img src="https://images.unsplash.com/photo-1543351611-58f69d7c1781?auto=format&fit=crop&q=80" className="rounded-lg shadow-2xl order-2 md:order-1" alt="Vision" />
+                            <img src="/images/vision.jpg" className="rounded-lg shadow-2xl order-2 md:order-1" alt="Vision" />
                         </Reveal>
                         <div className="order-1 md:order-2">
                             <Reveal direction="right" delay={3.8}>
@@ -47,7 +47,7 @@ const MissionVision = () => (
                             <Reveal width="100%" delay={0.4}>
                                 <div className="relative overflow-hidden space-y-6 text-lg text-slate-700 leading-relaxed shadow-lg p-8 bg-white border-r-8 border-[#2D5A27]">
                                     <img
-                                        src="https://images.unsplash.com/photo-1543351611-58f69d7c1781?auto=format&fit=crop&q=80"
+                                        src="/images/vision.jpg"
                                         className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none"
                                         alt=""
                                     />

@@ -70,7 +70,7 @@ const Home = () => {
                         initial={{ scale: 1.1 }}
                         animate={{ scale: 1 }}
                         transition={{ duration: 0.8 }}
-                        src="https://images.unsplash.com/photo-1511886929837-354d827aae26?auto=format&fit=crop&q=80"
+                        src="/images/hero-football.jpg"
                         className="w-full h-full object-cover"
                         alt="Hero"
                     />
@@ -107,9 +107,9 @@ const Home = () => {
             {/* OVERLAPPING BOXES */}
             <div className="relative z-[30] max-w-5xl mx-auto px-4 mt-8 md:-mt-24 mb-20 md:mb-0">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <HeroBox title="Jeunes" subtitle="l’avenir du football congolais" img="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?auto=format&fit=crop&q=80" path="/programme-jbr" />
-                    <HeroBox title="Ballon" subtitle="Symbole de passion et d’effort" img="https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&q=80" path="/programme-jbr" />
-                    <HeroBox title="Rêves" subtitle="Poursuivre ses rêves de grandeur" img="https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&q=80" path="/programme-jbr" />
+                    <HeroBox title="Jeunes" subtitle="l'avenir du football congolais" img="/images/mission-vision.jpg" path="/programme-jbr" />
+                    <HeroBox title="Ballon" subtitle="Symbole de passion et d'effort" img="/images/ballon.jpg" path="/programme-jbr" />
+                    <HeroBox title="Rêves" subtitle="Poursuivre ses rêves de grandeur" img="/images/reves.jpg" path="/programme-jbr" />
                 </div>
             </div>
 
@@ -144,7 +144,7 @@ const Home = () => {
                             <motion.img
                                 whileHover={{ scale: 1.05 }}
                                 transition={{ duration: 0.4 }}
-                                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80"
+                                src="/images/presenter.jpg"
                                 className="w-full h-full object-cover"
                                 alt="Presenter"
                             />
@@ -181,7 +181,7 @@ const Home = () => {
                         btnText="Nos objectifs"
                         btnColor="bg-secondary text-primary"
                         colorClass="bg-[#1b4332]"
-                        bgImg="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?auto=format&fit=crop&q=80"
+                        bgImg="/images/mission-vision.jpg"
                         path="/mission"
                     />
                     <FeatureCard
@@ -190,7 +190,7 @@ const Home = () => {
                         btnText="Découvrir"
                         btnColor="bg-secondary text-primary"
                         colorClass="bg-[#660708]"
-                        bgImg="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&q=80"
+                        bgImg="/images/lecture.jpg"
                         path="/lecture-et-moi"
                     />
                     <FeatureCard
@@ -199,7 +199,7 @@ const Home = () => {
                         btnText="Faire un don"
                         btnColor="bg-[#8b0000] text-white"
                         colorClass="bg-[#8a5a44]"
-                        bgImg="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80"
+                        bgImg="/images/donation.jpg"
                         path="/donation"
                     />
                     <FeatureCard
@@ -208,7 +208,7 @@ const Home = () => {
                         btnText="Collaborer avec nous"
                         btnColor="bg-[#8b0000] text-white"
                         colorClass="bg-[#3c2f2f]"
-                        bgImg="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80"
+                        bgImg="/images/partenariat.jpg"
                         path="/partenariat"
                     />
                 </div>

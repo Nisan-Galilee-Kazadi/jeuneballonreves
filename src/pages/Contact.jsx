@@ -106,7 +106,7 @@ const Contact = () => {
 
                             {/* Contact Form */}
                             <Reveal delay={0.4} width="100%">
-                                <form onSubmit={handleSubmit} className="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+                                <form onSubmit={handleSubmit} className="bg-slate-50 p-6 rounded-3xl border border-slate-100 shadow-sm space-y-3">
                                     {submitted ? (
                                         <div className="text-center py-8 animate-fade-in">
                                             <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -123,7 +123,7 @@ const Contact = () => {
                                         </div>
                                     ) : (
                                         <>
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                                 <div className="space-y-1">
                                                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Nom Complet</label>
                                                     <input

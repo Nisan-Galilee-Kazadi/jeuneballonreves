@@ -88,10 +88,12 @@ const AdminNewsCurator = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     title: item.title,
-                    content: `${item.summary}\n\n(Source: ${item.source} - ${item.link})`,
+                    content: item.summary,
                     imageUrl: item.imageUrl,
                     category: item.category || 'Général',
-                    author: 'Admin'
+                    author: 'Admin',
+                    isExternal: true,
+                    sourceUrl: item.link
                 })
             });
 
@@ -200,26 +202,30 @@ const AdminNewsCurator = () => {
                                                 <Image size={14} className="text-blue-600" />
                                                 <span className="text-xs font-bold text-blue-800">Mettre à jour l'image</span>
                                             </div>
-                                            <div className="flex gap-2">
-                                                <input
-                                                    type="text"
-                                                    value={customImageUrl}
-                                                    onChange={(e) => setCustomImageUrl(e.target.value)}
-                                                    className="flex-1 text-xs bg-white border border-blue-200 rounded px-2 py-1"
-                                                    placeholder="URL de l'image..."
-                                                />
-                                                <button
-                                                    onClick={() => saveImageUpdate(item)}
-                                                    className="px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
-                                                >
-                                                    <Check size={12} />
-                                                </button>
-                                                <button
-                                                    onClick={() => setEditingImage(null)}
-                                                    className="px-2 py-1 bg-slate-300 text-slate-700 text-xs rounded hover:bg-slate-400"
-                                                >
-                                                    ×
-                                                </button>
+                                            <div className="flex flex-col gap-2">
+                                                <div className="overflow-x-auto">
+                                                    <input
+                                                        type="text"
+                                                        value={customImageUrl}
+                                                        onChange={(e) => setCustomImageUrl(e.target.value)}
+                                                        className="min-w-full text-xs bg-white border border-blue-200 rounded px-2 py-1 whitespace-nowrap"
+                                                        placeholder="Entrez la nouvelle URL de l'image..."
+                                                    />
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => saveImageUpdate(item)}
+                                                        className="flex-1 px-2 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 flex items-center justify-center gap-1"
+                                                    >
+                                                        <Check size={12} /> Valider
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setEditingImage(null)}
+                                                        className="flex-1 px-2 py-1 bg-slate-300 text-slate-700 text-xs rounded hover:bg-slate-400"
+                                                    >
+                                                        × Annuler
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     ) : null}

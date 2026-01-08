@@ -100,9 +100,21 @@ const Actualites = () => {
                                             <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed mb-4">
                                                 {item.content}
                                             </p>
-                                            <button className="text-secondary font-black uppercase text-xs tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
-                                                Voir plus <i className="fas fa-arrow-right"></i>
-                                            </button>
+                                            {item.isExternal && item.sourceUrl ? (
+                                                <a 
+                                                    href={item.sourceUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="text-secondary font-black uppercase text-xs tracking-widest flex items-center gap-2 hover:gap-3 transition-all"
+                                                >
+                                                    Lire la source <ExternalLink size={14} />
+                                                </a>
+                                            ) : (
+                                                <button className="text-secondary font-black uppercase text-xs tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
+                                                    Voir plus <i className="fas fa-arrow-right"></i>
+                                                </button>
+                                            )}
                                         </div>
                                     </motion.div>
                                 ))
@@ -206,7 +218,20 @@ const Actualites = () => {
 
                                 {/* Footer */}
                                 <div className="mt-12 pt-6 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
-                                    <p className="italic">Source: Jeune Ballon Rêves</p>
+                                    <p className="italic">
+                                        {selectedNews.isExternal && selectedNews.sourceUrl ? (
+                                            <a 
+                                                href={selectedNews.sourceUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-primary hover:text-secondary transition-colors flex items-center gap-1"
+                                            >
+                                                Source: {new URL(selectedNews.sourceUrl).hostname} <ExternalLink size={12} />
+                                            </a>
+                                        ) : (
+                                            'Source: Jeune Ballon Rêves'
+                                        )}
+                                    </p>
                                     <p className="font-bold uppercase tracking-widest">Page 1</p>
                                 </div>
                             </div>

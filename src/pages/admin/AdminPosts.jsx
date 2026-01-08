@@ -129,9 +129,12 @@ const AdminPosts = () => {
                     >
                         <Plus size={18} /> Nouveau Post
                     </button>
-                    <button className="bg-white text-primary px-6 py-3 rounded-xl font-black italic uppercase text-xs tracking-widest flex items-center justify-center gap-2 border border-slate-200 w-full sm:w-auto">
-                        <Eye size={18} /> Voir sur le site
-                    </button>
+                    <button 
+                    onClick={() => window.open('/blog', '_blank')}
+                    className="bg-white text-primary px-6 py-3 rounded-xl font-black italic uppercase text-xs tracking-widest flex items-center justify-center gap-2 border border-slate-200 w-full sm:w-auto"
+                >
+                    <Eye size={18} /> Voir sur le site
+                </button>
                 </div>
             </div>
 
@@ -187,7 +190,13 @@ const AdminPosts = () => {
                 {posts.map((post) => (
                     <div key={post._id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 group relative">
                         <div className="h-48 overflow-hidden relative">
-                            <img src={post.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                            {post.imageUrl ? (
+                                <img src={post.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                            ) : (
+                                <div className="w-full h-full bg-slate-100 flex items-center justify-center">
+                                    <Camera size={32} className="text-slate-300" />
+                                </div>
+                            )}
                             <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2 rounded-xl text-primary flex gap-3 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button className="hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
                                 <button className="hover:text-secondary transition-colors"><Plus size={16} /></button>

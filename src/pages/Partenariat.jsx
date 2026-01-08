@@ -52,7 +52,7 @@ const Partenariat = () => (
 
                     <div className="space-y-10">
                         <Reveal delay={0.5}>
-                            <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80" className="rounded-sm shadow-2xl w-full border-b-8 border-secondary" alt="Partenariat" />
+                            <img src="/images/partenariat.jpg" className="rounded-sm shadow-2xl w-full border-b-8 border-secondary" alt="Partenariat" />
                         </Reveal>
 
                         <Reveal delay={0.6} width="100%">

@@ -119,7 +119,11 @@ const AdminPartners = () => {
                     <div key={partner._id} className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col items-center text-center group relative w-full h-full min-h-[280px] max-w-sm mx-auto">
                         <button className="absolute top-4 right-4 text-slate-200 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={16} /></button>
                         <div className="w-24 h-24 rounded-2xl bg-slate-50 p-4 mb-4 flex items-center justify-center flex-shrink-0">
-                            <img src={partner.logoUrl} className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all" alt="" />
+                            {partner.logoUrl ? (
+                                <img src={partner.logoUrl} className="max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all" alt="" />
+                            ) : (
+                                <Handshake size={32} className="text-slate-300" />
+                            )}
                         </div>
                         <span className="text-[9px] font-black uppercase tracking-widest text-green-600 bg-green-50 px-2 py-0.5 rounded-full mb-2">{partner.type}</span>
                         <h4 className="text-sm font-bold text-primary mb-1">{partner.name}</h4>

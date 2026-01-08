@@ -13,7 +13,9 @@ const AdminNews = () => {
         title: '',
         content: '',
         category: 'Général',
-        imageUrl: ''
+        imageUrl: '',
+        isExternal: false,
+        sourceUrl: ''
     });
     const alert = useAlertContext();
 
@@ -85,7 +87,7 @@ const AdminNews = () => {
             if (res.ok) {
                 alert.success('Actualité publiée avec succès !');
                 setIsCreating(false);
-                setNewItem({ title: '', content: '', category: 'Général', imageUrl: '' });
+                setNewItem({ title: '', content: '', category: 'Général', imageUrl: '', isExternal: false, sourceUrl: '' });
                 fetchNews();
             } else {
                 alert.error('Erreur lors de la publication');
@@ -136,6 +138,32 @@ const AdminNews = () => {
                                 />
                             </div>
                         </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Type d'actualité</label>
+                                <select
+                                    value={newItem.isExternal ? 'external' : 'internal'}
+                                    onChange={(e) => setNewItem({ ...newItem, isExternal: e.target.value === 'external', sourceUrl: e.target.value === 'external' ? newItem.sourceUrl : '' })}
+                                    className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-primary"
+                                >
+                                    <option value="internal">Interne (JBR)</option>
+                                    <option value="external">Externe (Source externe)</option>
+                                </select>
+                            </div>
+                            {newItem.isExternal && (
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">URL de la source</label>
+                                    <input
+                                        type="url"
+                                        value={newItem.sourceUrl}
+                                        onChange={(e) => setNewItem({ ...newItem, sourceUrl: e.target.value })}
+                                        className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-primary"
+                                        placeholder="https://example.com/article"
+                                        required={newItem.isExternal}
+                                    />
+                                </div>
+                            )}
+                        </div>
                         <div>
                             <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Contenu de l'article</label>
                             <textarea
@@ -163,7 +191,13 @@ const AdminNews = () => {
                     <div key={article._id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 group relative w-full">
                         {/* Image en haut */}
                         <div className="h-48 overflow-hidden relative">
-                            <img src={article.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                            {article.imageUrl ? (
+                                <img src={article.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="" />
+                            ) : (
+                                <div className="w-full h-full bg-slate-100 flex items-center justify-center">
+                                    <Newspaper size={32} className="text-slate-300" />
+                                </div>
+                            )}
                             <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2 rounded-xl text-primary flex gap-3 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
                                 <button className="hover:text-orange-500 transition-colors"><Edit size={16} /></button>
                                 <button className="hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
@@ -240,6 +274,32 @@ const AdminNews = () => {
                                     />
                                 </div>
                             </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Type d'actualité</label>
+                                    <select
+                                        value={editingItem.isExternal ? 'external' : 'internal'}
+                                        onChange={(e) => setEditingItem({ ...editingItem, isExternal: e.target.value === 'external', sourceUrl: e.target.value === 'external' ? editingItem.sourceUrl : '' })}
+                                        className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-primary"
+                                    >
+                                        <option value="internal">Interne (JBR)</option>
+                                        <option value="external">Externe (Source externe)</option>
+                                    </select>
+                                </div>
+                                {editingItem.isExternal && (
+                                    <div>
+                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">URL de la source</label>
+                                        <input
+                                            type="url"
+                                            value={editingItem.sourceUrl || ''}
+                                            onChange={(e) => setEditingItem({ ...editingItem, sourceUrl: e.target.value })}
+                                            className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-primary"
+                                            placeholder="https://example.com/article"
+                                            required={editingItem.isExternal}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                             <div>
                                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Contenu de l'article</label>
                                 <textarea
@@ -263,15 +323,9 @@ const AdminNews = () => {
                                     <option value="Other">Autre</option>
                                 </select>
                             </div>
-                            <div className="flex gap-4">
-                                <button type="submit" className="flex-1 bg-primary text-white py-4 rounded-2xl font-black italic uppercase tracking-[0.2em] shadow-lg flex items-center justify-center gap-2">
+                            <div className="flex flex-col gap-4">
+                                <button type="submit" className="w-full bg-primary text-white py-4 rounded-2xl font-black italic uppercase tracking-[0.2em] shadow-lg flex items-center justify-center gap-2">
                                     <Save size={18} /> Mettre à jour
-                                </button>
-                                <button 
-                                    onClick={() => setEditingItem(null)} 
-                                    className="px-8 bg-slate-100 text-slate-500 rounded-2xl font-bold uppercase text-xs tracking-widest"
-                                >
-                                    Annuler
                                 </button>
                             </div>
                         </form>
@@ -316,6 +370,18 @@ const AdminNews = () => {
                                     <p>Créé le: {new Date(viewingItem.createdAt).toLocaleDateString('fr-FR')}</p>
                                     {viewingItem.updatedAt && (
                                         <p>Modifié le: {new Date(viewingItem.updatedAt).toLocaleDateString('fr-FR')}</p>
+                                    )}
+                                    {viewingItem.isExternal && viewingItem.sourceUrl && (
+                                        <p className="mt-2">
+                                            <a 
+                                                href={viewingItem.sourceUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-primary hover:text-secondary flex items-center gap-1"
+                                            >
+                                                <ExternalLink size={12} /> Voir la source
+                                            </a>
+                                        </p>
                                     )}
                                 </div>
                             </div>
