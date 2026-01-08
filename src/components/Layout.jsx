@@ -266,7 +266,7 @@ const PageLoader = ({ onComplete }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             onComplete();
-        }, 3500); // Restauration à 3.5 secondes comme l'ancienne version
+        }, 2000); // Exactement 2 secondes
         return () => clearTimeout(timer);
     }, [onComplete]);
 
@@ -279,7 +279,7 @@ const PageLoader = ({ onComplete }) => {
             y: 0,
             transition: {
                 delay: i * 0.05,
-                duration: 0.5, // Restauration à 0.5s comme l'ancienne version
+                duration: 0.3, // Réduit de 0.5s à 0.3s
                 repeat: Infinity,
                 repeatType: "reverse",
                 repeatDelay: 1
@@ -295,7 +295,6 @@ const PageLoader = ({ onComplete }) => {
             transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 bg-primary z-[200] flex items-center justify-center pointer-events-none"
         >
-<<<<<<< HEAD
             <div className="relative pt-6">
                 {/* Rolling Football: Left -> Right -> Center */}
                 <motion.div
@@ -327,42 +326,6 @@ const PageLoader = ({ onComplete }) => {
                             {char === " " ? "\u00A0" : char}
                         </motion.span>
                     ))}
-=======
-            <div className="flex flex-col items-center relative w-max">
-                <div className="relative pt-6">
-                    {/* Rolling Football: Left -> Right -> Center */}
-                    <motion.div
-                        initial={{ x: "-150%", rotate: 0 }}
-                        animate={{
-                            x: ["-150%", "150%", "0%"],
-                            rotate: [0, 1080, 720]
-                        }}
-                        transition={{
-                            duration: 2.5,
-                            ease: "easeInOut",
-                            delay: 0.2
-                        }}
-                        className="absolute top-0 left-0 w-full flex justify-center"
-                    >
-                        <i className="fas fa-futbol text-secondary text-2xl drop-shadow-lg"></i>
-                    </motion.div>
-
-
-                    <div className="flex">
-                        {text.split("").map((char, i) => (
-                            <motion.span
-                                key={i}
-                                custom={i}
-                                variants={letterVariants}
-                                initial="initial"
-                                animate="animate"
-                                className="text-white/80 font-medium italic text-lg inline-block"
-                            >
-                                {char === " " ? "\u00A0" : char}
-                            </motion.span>
-                        ))}
-                    </div>
->>>>>>> 6c8c81b
                 </div>
             </div>
 
