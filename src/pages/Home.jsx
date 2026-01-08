@@ -5,8 +5,8 @@ import { Reveal } from '../components/Reveal';
 import { motion } from 'framer-motion';
 
 const revealUp = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
 };
 
 const HeroBox = ({ title, subtitle, img, path }) => {
@@ -16,12 +16,12 @@ const HeroBox = ({ title, subtitle, img, path }) => {
             variants={revealUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-50px" }}
             onClick={() => navigate(path)}
             className="relative h-48 md:h-56 rounded-sm overflow-hidden group shadow-2xl flex flex-col items-stretch cursor-pointer"
         >
             <div className="flex-1 overflow-hidden">
-                <img src={img} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={title} />
+                <img src={img} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt={title} />
             </div>
             <div className="bg-[#002244] py-4 px-2 text-center relative">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full">
@@ -41,7 +41,8 @@ const FeatureCard = ({ title, desc, btnText, btnColor, bgImg, colorClass, path }
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className={`feature-card ${colorClass} z-20`}
         >
             {bgImg && <img src={bgImg} className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-multiply" alt="" />}
@@ -66,9 +67,9 @@ const Home = () => {
             <section className="relative h-[65vh] md:h-[80vh] flex flex-col justify-center items-center text-center px-4 z-10">
                 <div className="absolute inset-0 -z-10 overflow-hidden">
                     <motion.img
-                        initial={{ scale: 1.2 }}
+                        initial={{ scale: 1.1 }}
                         animate={{ scale: 1 }}
-                        transition={{ duration: 1.5 }}
+                        transition={{ duration: 0.8 }}
                         src="https://images.unsplash.com/photo-1511886929837-354d827aae26?auto=format&fit=crop&q=80"
                         className="w-full h-full object-cover"
                         alt="Hero"
@@ -77,26 +78,26 @@ const Home = () => {
                 </div>
 
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
+                    initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1, ease: "backOut" }}
+                    transition={{ duration: 0.6, ease: "backOut" }}
                     className="flex flex-col items-center max-w-5xl"
                 >
-                    <Reveal direction="right" delay={3.8}>
+                    <Reveal direction="right" delay={0.5}>
                         <h1 className="text-white text-4xl md:text-8xl font-black italic tracking-tighter drop-shadow-2xl mb-4 leading-none uppercase">
                             JEUNES, BALLON & RÊVES
                         </h1>
                     </Reveal>
                     <p className="text-white text-xs md:text-lg font-bold italic mb-8 opacity-90 drop-shadow-md">
-                        Valorisons les talents d’aujourd’hui pour construire les champions de demain.
+                        Valorisons les talents d'aujourd'hui pour construire les champions de demain.
                     </p>
                     <button onClick={() => navigate('/contact')} className="btn-gold cursor-pointer">Découvrir l'émission</button>
                 </motion.div>
 
                 {/* Floating Football Micro-animation */}
                 <motion.div
-                    animate={{ y: [0, -20, 0], rotate: 360 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    animate={{ y: [0, -15, 0], rotate: 360 }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute bottom-10 right-10 opacity-20 hidden md:block"
                 >
                     <i className="fas fa-futbol text-6xl text-white"></i>
@@ -129,10 +130,10 @@ const Home = () => {
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
+                    viewport={{ once: true, margin: "-50px" }}
                     variants={{
-                        hidden: { opacity: 0, x: -100 },
-                        visible: { opacity: 1, x: 0, transition: { duration: 1, ease: "easeOut" } }
+                        hidden: { opacity: 0, x: -50 },
+                        visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeOut" } }
                     }}
                     className="max-w-6xl mx-auto flex flex-col items-center relative z-10"
                 >
@@ -141,8 +142,8 @@ const Home = () => {
                     <div className="bg-white rounded-sm flex flex-col md:flex-row shadow-2xl max-w-4xl border-t-8 border-primary overflow-hidden">
                         <div className="md:w-1/3 h-64 md:h-auto overflow-hidden relative group">
                             <motion.img
-                                whileHover={{ scale: 1.1 }}
-                                transition={{ duration: 0.8 }}
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ duration: 0.4 }}
                                 src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80"
                                 className="w-full h-full object-cover"
                                 alt="Presenter"
