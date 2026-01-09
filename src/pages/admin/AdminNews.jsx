@@ -24,7 +24,7 @@ const AdminNews = () => {
     }, []);
 
     const fetchNews = () => {
-        fetch('http://jbrbackend.onrender.com/api/news')
+        fetch('https://jbrbackend.onrender.com/api/news')
             .then(res => res.json())
             .then(data => setNews(data))
             .catch(err => console.error(err));
@@ -35,7 +35,7 @@ const AdminNews = () => {
             'Êtes-vous sûr de vouloir supprimer cette actualité ?',
             async () => {
                 try {
-                    const res = await fetch(`http://jbrbackend.onrender.com/api/news/${id}`, {
+                    const res = await fetch(`https://jbrbackend.onrender.com/api/news/${id}`, {
                         method: 'DELETE'
                     });
                     if (res.ok) {
@@ -59,7 +59,7 @@ const AdminNews = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`http://jbrbackend.onrender.com/api/news/${editingItem._id}`, {
+            const res = await fetch(`https://jbrbackend.onrender.com/api/news/${editingItem._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingItem)
@@ -79,7 +79,7 @@ const AdminNews = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://jbrbackend.onrender.com/api/news', {
+            const res = await fetch('https://jbrbackend.onrender.com/api/news', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newItem)
@@ -158,7 +158,7 @@ const AdminNews = () => {
                                         value={newItem.sourceUrl}
                                         onChange={(e) => setNewItem({ ...newItem, sourceUrl: e.target.value })}
                                         className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-primary"
-                                        placeholder="https://example.com/article"
+                                        placeholder="httpss://example.com/article"
                                         required={newItem.isExternal}
                                     />
                                 </div>
@@ -294,7 +294,7 @@ const AdminNews = () => {
                                             value={editingItem.sourceUrl || ''}
                                             onChange={(e) => setEditingItem({ ...editingItem, sourceUrl: e.target.value })}
                                             className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-primary"
-                                            placeholder="https://example.com/article"
+                                            placeholder="httpss://example.com/article"
                                             required={editingItem.isExternal}
                                         />
                                     </div>

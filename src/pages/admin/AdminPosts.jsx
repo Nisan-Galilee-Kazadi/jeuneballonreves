@@ -25,7 +25,7 @@ const AdminPosts = () => {
     }, []);
 
     const fetchPosts = () => {
-        fetch('http://jbrbackend.onrender.com/api/posts')
+        fetch('https://jbrbackend.onrender.com/api/posts')
             .then(res => res.json())
             .then(data => setPosts(data))
             .catch(err => console.error(err));
@@ -34,7 +34,7 @@ const AdminPosts = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://jbrbackend.onrender.com/api/posts', {
+            const res = await fetch('https://jbrbackend.onrender.com/api/posts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newPost)
@@ -53,7 +53,7 @@ const AdminPosts = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`http://jbrbackend.onrender.com/api/posts/${editingPost._id}`, {
+            const res = await fetch(`https://jbrbackend.onrender.com/api/posts/${editingPost._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingPost)
@@ -72,7 +72,7 @@ const AdminPosts = () => {
     const handleDelete = async (id) => {
         if (confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
             try {
-                const res = await fetch(`http://jbrbackend.onrender.com/api/posts/${id}`, {
+                const res = await fetch(`https://jbrbackend.onrender.com/api/posts/${id}`, {
                     method: 'DELETE'
                 });
                 if (res.ok) {
@@ -98,7 +98,7 @@ const AdminPosts = () => {
                 const post = posts.find(p => p._id === postId);
                 if (post) {
                     const updatedComments = post.comments.filter((_, index) => index !== commentIndex);
-                    const res = await fetch(`http://jbrbackend.onrender.com/api/posts/${postId}`, {
+                    const res = await fetch(`https://jbrbackend.onrender.com/api/posts/${postId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ ...post, comments: updatedComments })
@@ -163,7 +163,7 @@ const AdminPosts = () => {
                                     value={newPost.imageUrl}
                                     onChange={(e) => setNewPost({ ...newPost, imageUrl: e.target.value })}
                                     className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-secondary"
-                                    placeholder="https://images.unsplash.com/..."
+                                    placeholder="httpss://images.unsplash.com/..."
                                     required
                                 />
                             </div>
@@ -356,7 +356,7 @@ const AdminPosts = () => {
                                         value={editingPost.imageUrl}
                                         onChange={(e) => setEditingPost({ ...editingPost, imageUrl: e.target.value })}
                                         className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-blue-500"
-                                        placeholder="https://images.unsplash.com/..."
+                                        placeholder="httpss://images.unsplash.com/..."
                                         required
                                     />
                                 </div>

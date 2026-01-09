@@ -256,9 +256,9 @@ const Home = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
-                            { name: 'Émissions', img: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&q=80' },
-                            { name: 'Interviews', img: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80' },
-                            { name: 'Actualités', img: 'https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&q=80' }
+                            { name: 'Émissions', img: '/images/presenter.jpg' },
+                            { name: 'Interviews', img: '/images/lecture.jpg' },
+                            { name: 'Actualités', img: '/images/ballon.jpg' }
                         ].map((item, idx) => (
                             <motion.div
                                 key={idx}

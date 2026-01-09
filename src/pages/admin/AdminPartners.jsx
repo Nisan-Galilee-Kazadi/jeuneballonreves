@@ -17,7 +17,7 @@ const AdminPartners = () => {
     }, []);
 
     const fetchPartners = () => {
-        fetch('http://jbrbackend.onrender.com/api/partners')
+        fetch('https://jbrbackend.onrender.com/api/partners')
             .then(res => res.json())
             .then(data => setPartners(data))
             .catch(err => console.error(err));
@@ -26,7 +26,7 @@ const AdminPartners = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://jbrbackend.onrender.com/api/partners', {
+            const res = await fetch('https://jbrbackend.onrender.com/api/partners', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newPartner)
@@ -91,7 +91,7 @@ const AdminPartners = () => {
                                     value={newPartner.logoUrl}
                                     onChange={(e) => setNewPartner({ ...newPartner, logoUrl: e.target.value })}
                                     className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-green-500"
-                                    placeholder="https://example.com/logo.png"
+                                    placeholder="httpss://example.com/logo.png"
                                     required
                                 />
                             </div>
@@ -102,7 +102,7 @@ const AdminPartners = () => {
                                     value={newPartner.website}
                                     onChange={(e) => setNewPartner({ ...newPartner, website: e.target.value })}
                                     className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-green-500"
-                                    placeholder="https://example.com"
+                                    placeholder="httpss://example.com"
                                 />
                             </div>
                         </div>

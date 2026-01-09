@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Use environment variable for production, fallback to localhost for development
-const API_URL = import.meta.env.VITE_API_URL || 'https://jbrbackend.onrender.com/api';
+const API_URL = import.meta.env.VITE_API_URL || 'httpss://jbrbackend.onrender.com/api';
 
 const api = axios.create({
     baseURL: API_URL,
