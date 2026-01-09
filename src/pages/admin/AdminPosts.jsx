@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Camera, Send, Plus, Trash2, Heart, MessageCircle, MoreVertical, Eye, Edit, X, Save } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { deletePost } from '../../api';
+import { useAlertContext } from '../../components/AlertProvider';
 
 const AdminPosts = () => {
+    const alert = useAlertContext();
     const [posts, setPosts] = useState([]);
     const [isCreating, setIsCreating] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
@@ -71,60 +73,19 @@ const AdminPosts = () => {
     };
 
     const handleDelete = async (id) => {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
-            try {
-                await deletePost(id);
-                
-                // Créer une alerte avec z-index élevé
-                const alertDiv = document.createElement('div');
-                alertDiv.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: #10b981;
-                    color: white;
-                    padding: 16px 24px;
-                    border-radius: 8px;
-                    font-weight: bold;
-                    z-index: 99999;
-                    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-                    animation: slideIn 0.3s ease-out;
-                `;
-                alertDiv.textContent = 'Post supprimé avec succès !';
-                document.body.appendChild(alertDiv);
-                
-                setTimeout(() => {
-                    alertDiv.style.animation = 'slideOut 0.3s ease-in';
-                    setTimeout(() => document.body.removeChild(alertDiv), 300);
-                }, 3000);
-                
-                setSelectedPost(null);
-                fetchPosts();
-            } catch (err) {
-                // Alert d'erreur avec z-index élevé
-                const alertDiv = document.createElement('div');
-                alertDiv.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: #ef4444;
-                    color: white;
-                    padding: 16px 24px;
-                    border-radius: 8px;
-                    font-weight: bold;
-                    z-index: 99999;
-                    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-                    animation: slideIn 0.3s ease-out;
-                `;
-                alertDiv.textContent = 'Erreur lors de la suppression';
-                document.body.appendChild(alertDiv);
-                
-                setTimeout(() => {
-                    alertDiv.style.animation = 'slideOut 0.3s ease-in';
-                    setTimeout(() => document.body.removeChild(alertDiv), 300);
-                }, 3000);
+        alert.confirm(
+            'Êtes-vous sûr de vouloir supprimer ce post ?',
+            async () => {
+                try {
+                    await deletePost(id);
+                    alert.success('Post supprimé avec succès !');
+                    setSelectedPost(null);
+                    fetchPosts();
+                } catch (err) {
+                    alert.error('Erreur lors de la suppression');
+                }
             }
-        }
+        );
     };
 
     const handleEditPost = (post) => {
@@ -134,29 +95,34 @@ const AdminPosts = () => {
     };
 
     const handleDeleteComment = async (postId, commentIndex) => {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')) {
-            try {
-                const post = posts.find(p => p._id === postId);
-                if (post) {
-                    const updatedComments = post.comments.filter((_, index) => index !== commentIndex);
-                    const res = await fetch(`https://jbrbackend.onrender.com/api/posts/${postId}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ ...post, comments: updatedComments })
-                    });
-                    if (res.ok) {
-                        alert('Commentaire supprimé avec succès !');
-                        fetchPosts();
-                        // Mettre à jour le post sélectionné si le modal est ouvert
-                        if (selectedPost && selectedPost._id === postId) {
-                            setSelectedPost({ ...selectedPost, comments: updatedComments });
+        alert.confirm(
+            'Êtes-vous sûr de vouloir supprimer ce commentaire ?',
+            async () => {
+                try {
+                    const post = posts.find(p => p._id === postId);
+                    if (post) {
+                        const updatedComments = post.comments.filter((_, idx) => idx !== commentIndex);
+                        const res = await fetch(`https://jbrbackend.onrender.com/api/posts/${postId}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ ...post, comments: updatedComments })
+                        });
+                        if (res.ok) {
+                            alert.success('Commentaire supprimé avec succès !');
+                            fetchPosts();
+                            // Mettre à jour le post sélectionné si le modal est ouvert
+                            if (selectedPost && selectedPost._id === postId) {
+                                setSelectedPost({ ...selectedPost, comments: updatedComments });
+                            }
+                        } else {
+                            alert.error('Erreur lors de la suppression du commentaire');
                         }
                     }
+                } catch (err) {
+                    alert.error('Erreur réseau lors de la suppression');
                 }
-            } catch (err) {
-                alert('Erreur lors de la suppression du commentaire');
             }
-        }
+        );
     };
 
     return (
@@ -438,31 +404,4 @@ const AdminPosts = () => {
 };
 
 export default AdminPosts;
-
-// Ajouter les animations CSS pour les alertes
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
 
