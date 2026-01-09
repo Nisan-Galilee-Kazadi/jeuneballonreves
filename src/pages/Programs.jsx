@@ -1,15 +1,14 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { Reveal } from '../components/Reveal';
+import { AnimatedPageTitle } from '../components/AnimatedPageTitle';
 
 const ProgramDetail = ({ title, subtitle, content, objectives, quote, image }) => (
     <Layout>
         <div className="pt-32 pb-20 px-4 bg-white">
             <div className="max-w-5xl mx-auto space-y-16">
                 <header className="text-center space-y-4">
-                    <Reveal width="100%" direction="right" delay={3.8}>
-                        <h1 className="text-primary text-5xl md:text-7xl font-black italic tracking-tighter uppercase">{title}</h1>
-                    </Reveal>
+                    <AnimatedPageTitle title={title} className="justify-center" />
                     <Reveal width="100%" delay={0.4}>
                         <p className="text-slate-500 font-bold uppercase tracking-[0.3em] text-sm">{subtitle}</p>
                     </Reveal>

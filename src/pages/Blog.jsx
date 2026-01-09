@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, MessageCircle, Send, X } from 'lucide-react';
 import Layout from '../components/Layout';
 import { Reveal } from '../components/Reveal';
+import { AnimatedPageTitle } from '../components/AnimatedPageTitle';
 import { getPosts } from '../api';
 
 const Blog = () => {
@@ -178,9 +179,7 @@ const Blog = () => {
             <div className="pt-32 pb-20 px-4 bg-slate-50 min-h-screen">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
-                        <Reveal width="100%" direction="right" delay={3.8}>
-                            <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-4 uppercase">Blog JBR</h1>
-                        </Reveal>
+                        <AnimatedPageTitle title="Blog JBR" className="justify-center" />
                         <Reveal width="100%" delay={0.4}>
                             <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Nos moments, nos histoires, nos rêves</p>
                         </Reveal>

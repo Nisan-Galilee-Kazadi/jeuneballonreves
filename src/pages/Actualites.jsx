@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink } from 'lucide-react';
 import Layout from '../components/Layout';
 import { Reveal } from '../components/Reveal';
+import { AnimatedPageTitle } from '../components/AnimatedPageTitle';
 import { API_ENDPOINTS } from '../config/api';
 
 const Actualites = () => {
@@ -40,9 +41,7 @@ const Actualites = () => {
             <div className="pt-32 pb-20 px-4 bg-slate-50 min-h-screen">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
-                        <Reveal width="100%" direction="right" delay={3.8}>
-                            <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-4 uppercase">Actualités Football</h1>
-                        </Reveal>
+                        <AnimatedPageTitle title="Actualités Football" className="justify-center" />
                         <Reveal width="100%" delay={0.4}>
                             <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Les dernières nouvelles du monde du ballon rond</p>
                         </Reveal>
@@ -115,7 +114,7 @@ const Actualites = () => {
                                                 {item.content}
                                             </p>
                                             {item.isExternal && item.sourceUrl ? (
-                                                <a 
+                                                <a
                                                     href={item.sourceUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
@@ -234,7 +233,7 @@ const Actualites = () => {
                                 <div className="mt-12 pt-6 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
                                     <p className="italic">
                                         {selectedNews.isExternal && selectedNews.sourceUrl ? (
-                                            <a 
+                                            <a
                                                 href={selectedNews.sourceUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"

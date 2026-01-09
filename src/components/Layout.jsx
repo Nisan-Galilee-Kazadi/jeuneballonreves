@@ -237,7 +237,7 @@ const Footer = () => (
         <div className="absolute -bottom-10 -left-10 opacity-5">
             <i className="fas fa-futbol text-[150px] text-white"></i>
         </div>
-        
+
         {/* Animated Football */}
         <motion.div
             animate={{ rotate: 360 }}
@@ -266,7 +266,7 @@ const PageLoader = ({ onComplete }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             onComplete();
-        }, 2000); // Exactement 2 secondes
+        }, 2000);
         return () => clearTimeout(timer);
     }, [onComplete]);
 
@@ -279,7 +279,7 @@ const PageLoader = ({ onComplete }) => {
             y: 0,
             transition: {
                 delay: i * 0.05,
-                duration: 0.3, // Réduit de 0.5s à 0.3s
+                duration: 0.5,
                 repeat: Infinity,
                 repeatType: "reverse",
                 repeatDelay: 1
@@ -289,53 +289,62 @@ const PageLoader = ({ onComplete }) => {
 
     return (
         <motion.div
-            initial={{ y: 0, opacity: 1 }}
-            animate={{ y: "-100%", opacity: 0 }}
-            exit={{ y: 0, opacity: 0 }}
-            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-primary z-[200] flex items-center justify-center pointer-events-none"
+            initial={{ y: 0 }}
+            exit={{ y: "-100%" }}
+            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 bg-primary z-[200] flex items-center justify-center"
         >
-            <div className="relative pt-6">
-                {/* Rolling Football: Left -> Right -> Center */}
-                <motion.div
-                    initial={{ x: "-150%", rotate: 0 }}
-                    animate={{
-                        x: ["-150%", "150%", "0%"],
-                        rotate: [0, 1080, 720]
-                    }}
-                    transition={{
-                        duration: 2.5,
-                        ease: "easeInOut",
-                        delay: 0.2
-                    }}
-                    className="absolute top-0 left-0 w-full flex justify-center"
-                >
-                    <i className="fas fa-futbol text-secondary text-2xl drop-shadow-lg"></i>
-                </motion.div>
+            <div className="flex flex-col items-center relative w-max">
+                <div className="relative pt-6">
+                    {/* Running Football Animation - Improved */}
+                    <motion.div
+                        initial={{ x: "-150%", rotate: 0 }}
+                        animate={{
+                            x: ["-150%", "150%", "0%"],
+                            rotate: [0, 1080, 720]
+                        }}
+                        transition={{
+                            duration: 2.5,
+                            ease: "easeInOut",
+                            delay: 0.0
+                        }}
+                        className="absolute top-0 left-0 w-full flex justify-center"
+                    >
+                        <i className="fas fa-futbol text-secondary text-4xl drop-shadow-lg"></i>
+                    </motion.div>
 
-                <div className="flex">
-                    {text.split("").map((char, i) => (
-                        <motion.span
-                            key={i}
-                            custom={i}
-                            variants={letterVariants}
-                            initial="initial"
-                            animate="animate"
-                            className="text-white/80 font-medium italic text-lg inline-block"
-                        >
-                            {char === " " ? "\u00A0" : char}
-                        </motion.span>
-                    ))}
+
+                    <div className="flex mt-8">
+                        {text.split("").map((char, i) => (
+                            <motion.span
+                                key={i}
+                                custom={i}
+                                variants={letterVariants}
+                                initial="initial"
+                                animate="animate"
+                                className="text-white/90 font-black italic text-2xl inline-block"
+                            >
+                                {char === " " ? "\u00A0" : char}
+                            </motion.span>
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            {/* Loading Progress Bar */}
-            <motion.div
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 2, delay: 0.5, ease: "easeInOut" }}
-                className="absolute bottom-0 left-0 h-1 bg-secondary/30"
-            />
+                {/* Progress Line */}
+                <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 1.5, delay: 0.2 }}
+                    className="w-full h-[4px] bg-white/10 mt-4 rounded-full overflow-hidden"
+                >
+                    <motion.div
+                        initial={{ x: "-100%" }}
+                        animate={{ x: "0%" }}
+                        transition={{ duration: 2, ease: "circOut" }}
+                        className="w-full h-full bg-secondary"
+                    />
+                </motion.div>
+            </div>
         </motion.div>
     );
 };

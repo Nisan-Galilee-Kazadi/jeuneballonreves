@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { Reveal } from '../components/Reveal';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatedPageTitle } from '../components/AnimatedPageTitle';
 
 const FAQItem = ({ question, answer, isOpen, toggleOpen }) => {
     return (
@@ -96,9 +97,7 @@ const Contact = () => {
                         {/* Contact Details */}
                         <div className="space-y-12">
                             <div>
-                                <Reveal direction="right" delay={3.8}>
-                                    <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-8 border-b-4 border-secondary inline-block">Contact</h1>
-                                </Reveal>
+                                <AnimatedPageTitle title="Contact" />
                                 <Reveal delay={0.3}>
                                     <p className="text-slate-600">Vous avez une question ou souhaitez nous rejoindre ? Utilisez le formulaire ou les canaux ci-dessous.</p>
                                 </Reveal>

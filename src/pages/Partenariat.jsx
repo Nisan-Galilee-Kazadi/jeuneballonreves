@@ -1,15 +1,14 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { Reveal } from '../components/Reveal';
+import { AnimatedPageTitle } from '../components/AnimatedPageTitle';
 
 const Partenariat = () => (
     <Layout>
         <div className="pt-32 pb-20 px-4 bg-white">
             <div className="max-w-5xl mx-auto">
                 <header className="text-center mb-16">
-                    <Reveal width="100%" direction="right" delay={3.8}>
-                        <h1 className="text-primary text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-4">Partenariat</h1>
-                    </Reveal>
+                    <AnimatedPageTitle title="Partenariat" className="justify-center" />
                     <Reveal width="100%" delay={0.4}>
                         <p className="text-slate-500 font-bold uppercase tracking-[0.3em] text-sm">Construisons ensemble l'avenir du football</p>
                     </Reveal>

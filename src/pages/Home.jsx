@@ -12,7 +12,7 @@ const revealUp = {
 const HeroBox = memo(({ title, subtitle, img, path }) => {
     const navigate = useNavigate();
     const handleClick = useCallback(() => navigate(path), [navigate, path]);
-    
+
     return (
         <motion.div
             variants={revealUp}
@@ -40,7 +40,7 @@ const HeroBox = memo(({ title, subtitle, img, path }) => {
 const FeatureCard = memo(({ title, desc, btnText, btnColor, bgImg, colorClass, path }) => {
     const navigate = useNavigate();
     const handleClick = useCallback(() => navigate(path), [navigate, path]);
-    
+
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -73,7 +73,7 @@ const Home = () => {
                     <motion.img
                         initial={{ scale: 1.1 }}
                         animate={{ scale: 1 }}
-                        transition={{ duration: 0.8 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }} // Slightly slower for smoother feel
                         src="/images/hero-football.jpg"
                         className="w-full h-full object-cover"
                         alt="Hero"
@@ -82,12 +82,12 @@ const Home = () => {
                 </div>
 
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.6, ease: "backOut" }}
+                    transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }} // Added delay to wait for curtain slightly
                     className="flex flex-col items-center max-w-5xl"
                 >
-                    <Reveal direction="right" delay={0.5}>
+                    <Reveal direction="right" delay={0.6}> {/* Increased delay */}
                         <h1 className="text-white text-4xl md:text-8xl font-black italic tracking-tighter drop-shadow-2xl mb-4 leading-none uppercase">
                             JEUNES, BALLON & RÊVES
                         </h1>
@@ -95,14 +95,14 @@ const Home = () => {
                     <p className="text-white text-xs md:text-lg font-bold italic mb-8 opacity-90 drop-shadow-md">
                         Valorisons les talents d'aujourd'hui pour construire les champions de demain.
                     </p>
-                    <button onClick={() => navigate('/contact')} className="btn-gold cursor-pointer">Découvrir l'émission</button>
+                    <button onClick={() => navigate('/contact')} className="btn-gold cursor-pointer transition-transform hover:scale-105 active:scale-95">Découvrir l'émission</button>
                 </motion.div>
 
-                {/* Floating Football Micro-animation */}
+                {/* Floating Football Micro-animation - Optimized */}
                 <motion.div
-                    animate={{ y: [0, -15, 0], rotate: 360 }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute bottom-10 right-10 opacity-20 hidden md:block"
+                    animate={{ y: [0, -15, 0] }} // Removed rotation for performance, keep bobbing
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute bottom-10 right-10 opacity-20 hidden md:block will-change-transform"
                 >
                     <i className="fas fa-futbol text-6xl text-white"></i>
                 </motion.div>
@@ -123,10 +123,11 @@ const Home = () => {
                 <div className="absolute top-20 -left-20 opacity-5 -rotate-12">
                     <i className="fas fa-futbol text-[200px] text-primary"></i>
                 </div>
+                {/* Simplified Background Animation */}
                 <motion.div
-                    animate={{ x: [0, 1000], y: [0, -200, 0], rotate: 720 }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                    className="absolute top-40 -left-10 opacity-[0.02] pointer-events-none"
+                    animate={{ x: [0, 50], y: [0, -20] }} // drastically reduced movement range
+                    transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+                    className="absolute top-40 -left-10 opacity-[0.02] pointer-events-none will-change-transform"
                 >
                     <i className="fas fa-futbol text-[120px] text-primary"></i>
                 </motion.div>
@@ -134,10 +135,10 @@ const Home = () => {
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: "-30px", amount: 0.3 }}
+                    viewport={{ once: true, margin: "-50px", amount: 0.1 }} // Render earlier
                     variants={{
-                        hidden: { opacity: 0, x: -30 },
-                        visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } }
+                        hidden: { opacity: 0, x: -20 },
+                        visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeOut" } }
                     }}
                     className="max-w-6xl mx-auto flex flex-col items-center relative z-10"
                 >
@@ -145,11 +146,9 @@ const Home = () => {
 
                     <div className="bg-white rounded-sm flex flex-col md:flex-row shadow-2xl max-w-4xl border-t-8 border-primary overflow-hidden">
                         <div className="md:w-1/3 h-64 md:h-auto overflow-hidden relative group">
-                            <motion.img
-                                whileHover={{ scale: 1.05 }}
-                                transition={{ duration: 0.3 }}
+                            <img
                                 src="/images/presenter.jpg"
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" // CSS hover instead of motion for performance
                                 alt="Presenter"
                             />
                             <div className="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-500" />
@@ -218,14 +217,15 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* MARQUEE SECTION (DEFILEMENT) */}
+            {/* MARQUEE SECTION (DEFILEMENT) - Optimized */}
             <div className="bg-primary py-8 overflow-hidden border-y-4 border-secondary/30 relative">
                 <motion.div
-                    animate={{ x: [0, -1000] }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                    className="flex whitespace-nowrap gap-20 items-center justify-start"
+                    animate={{ x: ["0%", "-50%"] }} // Optimized translate
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                    className="flex whitespace-nowrap gap-20 items-center justify-start w-max will-change-transform" // w-max is important
                 >
-                    {[1, 2, 3].map((_, i) => (
+                    {/* Doubled content for seamless loop */}
+                    {[1, 2, 3, 1, 2, 3].map((_, i) => (
                         <div key={i} className="flex gap-20 items-center">
                             <span className="text-white text-4xl md:text-6xl font-black italic tracking-tighter uppercase opacity-40">JEUNES</span>
                             <i className="fas fa-futbol text-secondary text-3xl opacity-60"></i>
@@ -246,7 +246,7 @@ const Home = () => {
 
                 <div className="max-w-5xl mx-auto text-center relative z-10">
                     <motion.h2
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true, margin: "-30px", amount: 0.3 }}
                         className="text-primary text-3xl font-black italic tracking-tighter mb-16 uppercase"
@@ -262,15 +262,15 @@ const Home = () => {
                         ].map((item, idx) => (
                             <motion.div
                                 key={idx}
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 15 }} // Reduced distance
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: idx * 0.05, duration: 0.3 }}
-                                viewport={{ once: true, margin: "-30px", amount: 0.3 }}
+                                transition={{ delay: idx * 0.1, duration: 0.4 }} // Slightly simpler timing
+                                viewport={{ once: true, margin: "-30px", amount: 0.1 }}
                                 onClick={() => navigate('/medias')}
                                 className="bg-white rounded-sm overflow-hidden shadow-xl border-b-8 border-primary group block cursor-pointer"
                             >
                                 <div className="h-44 relative overflow-hidden">
-                                    <img src={item.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt={item.name} />
+                                    <img src={item.img} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt={item.name} />
                                     <div className="absolute inset-0 bg-primary/20 group-hover:bg-primary/0 transition-colors duration-300" />
                                 </div>
                                 <div className="bg-[#003366] py-4 text-white text-[12px] font-bold tracking-widest italic flex flex-col group-hover:bg-secondary group-hover:text-primary transition-colors duration-300">

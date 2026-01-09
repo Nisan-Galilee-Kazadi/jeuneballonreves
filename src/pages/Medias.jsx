@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
+import { AnimatedPageTitle } from '../components/AnimatedPageTitle';
 import { getPosts } from '../api';
 
 const Medias = () => {
@@ -26,7 +27,7 @@ const Medias = () => {
             <div className="pt-32 pb-20 px-4 bg-slate-50 min-h-screen">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-16">
-                        <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-4 uppercase">Médias</h1>
+                        <AnimatedPageTitle title="Médias" className="justify-center" />
                         <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Le projet Jeunes, Ballon et Rêves en images</p>
                     </div>
 

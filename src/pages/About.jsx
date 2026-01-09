@@ -1,14 +1,13 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { Reveal } from '../components/Reveal';
+import { AnimatedPageTitle } from '../components/AnimatedPageTitle';
 
 const About = () => (
     <Layout>
         <div className="pt-32 pb-20 px-4 bg-white">
             <div className="max-w-4xl mx-auto">
-                <Reveal direction="right" delay={3.8}>
-                    <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-8 border-b-4 border-secondary inline-block">À propos</h1>
-                </Reveal>
+                <AnimatedPageTitle title="À propos" />
                 <div className="grid md:grid-cols-2 gap-12 items-start mt-12">
                     <Reveal delay={0.3}>
                         <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80" className="rounded-lg shadow-2xl w-full" alt="Presenter" />

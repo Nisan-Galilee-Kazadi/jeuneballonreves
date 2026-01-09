@@ -1,15 +1,14 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { Reveal } from '../components/Reveal';
+import { AnimatedPageTitle } from '../components/AnimatedPageTitle';
 
 const MissionVision = () => (
     <Layout>
         <div className="pt-32 pb-20 px-4">
             <div className="max-w-5xl mx-auto space-y-20">
                 <section>
-                    <Reveal direction="right" delay={3.8}>
-                        <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-8 border-b-4 border-secondary inline-block">Mission</h1>
-                    </Reveal>
+                    <AnimatedPageTitle title="Mission" />
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         <Reveal style={{ width: "100%" }} delay={0.3}>
                             <div className="relative overflow-hidden space-y-6 text-lg text-slate-700 leading-relaxed shadow-lg p-8 bg-white border-l-8 border-[#2D5A27]">
@@ -41,9 +40,7 @@ const MissionVision = () => (
                             <img src="/images/vision.jpg" className="rounded-lg shadow-2xl order-2 md:order-1" alt="Vision" />
                         </Reveal>
                         <div className="order-1 md:order-2">
-                            <Reveal direction="right" delay={3.8}>
-                                <h1 className="text-primary text-5xl font-black italic tracking-tighter mb-8 border-b-4 border-secondary inline-block">Vision</h1>
-                            </Reveal>
+                            <AnimatedPageTitle title="Vision" />
                             <Reveal width="100%" delay={0.4}>
                                 <div className="relative overflow-hidden space-y-6 text-lg text-slate-700 leading-relaxed shadow-lg p-8 bg-white border-r-8 border-[#2D5A27]">
                                     <img
