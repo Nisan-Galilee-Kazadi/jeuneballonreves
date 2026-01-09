@@ -89,7 +89,7 @@ const Blog = () => {
 
         // Backend sync
         try {
-            await fetch(`http://jbrbackend.onrender.com/api/posts/${postId}/react`, {
+            await fetch(`${API_ENDPOINTS.posts}/${postId}/react`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ type: 'likes' })
@@ -118,7 +118,7 @@ const Blog = () => {
 
             // Register visitor in backend
             try {
-                await fetch('http://jbrbackend.onrender.com/api/visitors', {
+                await fetch(API_ENDPOINTS.visitors, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name: newName })
@@ -161,7 +161,7 @@ const Blog = () => {
 
         // Backend sync
         try {
-            await fetch(`http://jbrbackend.onrender.com/api/posts/${postId}/comment`, {
+            await fetch(`${API_ENDPOINTS.posts}/${postId}/comment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newComment)

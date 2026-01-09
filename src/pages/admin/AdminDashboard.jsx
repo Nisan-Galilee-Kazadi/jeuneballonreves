@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Users, Camera, Newspaper, Heart, TrendingUp, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { API_ENDPOINTS } from '../../config/api';
 
 const StatCard = ({ title, value, icon, color, trend, linkTo }) => (
     <Link to={linkTo} className="block">
@@ -30,7 +31,7 @@ const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
 
     useEffect(() => {
-        fetch('http://jbrbackend.onrender.com/api/admin/stats')
+        fetch(API_ENDPOINTS.admin.stats)
             .then(res => res.json())
             .then(data => setStats(data))
             .catch(err => console.error(err));

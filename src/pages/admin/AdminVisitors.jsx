@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Globe, Activity, MessageCircle, Heart, Trash2 } from 'lucide-react';
+import { Users, Eye, MapPin, Calendar, TrendingUp } from 'lucide-react';
+import AdminLayout from '../../components/admin/AdminLayout';
+import { API_ENDPOINTS } from '../../config/api';
 
 const AdminVisitors = () => {
     const [visitors, setVisitors] = useState([]);
@@ -10,7 +12,7 @@ const AdminVisitors = () => {
     }, []);
 
     const fetchVisitors = () => {
-        fetch('http://jbrbackend.onrender.com/api/visitors')
+        fetch(API_ENDPOINTS.visitors)
             .then(res => res.json())
             .then(data => setVisitors(data))
             .catch(err => console.error(err))

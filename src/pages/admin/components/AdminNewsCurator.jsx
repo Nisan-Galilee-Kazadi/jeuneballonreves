@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, Plus, Check, RefreshCw, ExternalLink, Copy, Image, Shield, AlertCircle } from 'lucide-react';
 import { useAlertContext } from '../../../components/AlertProvider';
+import { API_ENDPOINTS } from '../../../config/api';
 
 const AdminNewsCurator = () => {
     const [externalNews, setExternalNews] = useState([]);
@@ -18,7 +19,7 @@ const AdminNewsCurator = () => {
 
     const fetchExternalNews = () => {
         setLoading(true);
-        fetch('http://jbrbackend.onrender.com/api/admin/aggregate-news')
+        fetch(API_ENDPOINTS.admin.aggregateNews)
             .then(res => res.json())
             .then(data => {
                 setExternalNews(data);
@@ -33,7 +34,7 @@ const AdminNewsCurator = () => {
     const verifySource = async (item) => {
         setVerifyingSource(item.id);
         try {
-            const response = await fetch(`http://jbrbackend.onrender.com/api/verify-source`, {
+            const response = await fetch(API_ENDPOINTS.admin.verifySource, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url: item.link })
@@ -83,7 +84,7 @@ const AdminNewsCurator = () => {
     const handleImport = async (item) => {
         setImporting(item.id);
         try {
-            const response = await fetch('http://jbrbackend.onrender.com/api/news', {
+            const response = await fetch(API_ENDPOINTS.news, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
