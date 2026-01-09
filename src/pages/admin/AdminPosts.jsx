@@ -7,6 +7,9 @@ const AdminPosts = () => {
     const [isCreating, setIsCreating] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [postToDelete, setPostToDelete] = useState(null);
+    const [alert, setAlert] = useState({ show: false, message: '', type: 'success' });
     const [editingPost, setEditingPost] = useState({
         title: '',
         caption: '',
@@ -26,9 +29,22 @@ const AdminPosts = () => {
 
     const fetchPosts = () => {
         fetch('https://jbrbackend.onrender.com/api/posts')
-            .then(res => res.json())
-            .then(data => setPosts(data))
-            .catch(err => console.error(err));
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => setPosts(data || []))
+            .catch(err => {
+                console.error('Error fetching posts:', err);
+                setAlert({ show: true, message: 'Erreur lors du chargement des posts', type: 'error' });
+            });
+    };
+
+    const showAlert = (message, type = 'success') => {
+        setAlert({ show: true, message, type });
+        setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
     };
 
     const handleSubmit = async (e) => {
@@ -40,13 +56,15 @@ const AdminPosts = () => {
                 body: JSON.stringify(newPost)
             });
             if (res.ok) {
-                alert('Post créé avec succès !');
+                showAlert('Post créé avec succès !', 'success');
                 setIsCreating(false);
                 setNewPost({ title: '', caption: '', imageUrl: '', type: 'blog' });
                 fetchPosts();
+            } else {
+                throw new Error('Erreur lors de la création');
             }
         } catch (err) {
-            alert('Erreur lors de la création');
+            showAlert('Erreur lors de la création du post', 'error');
         }
     };
 
@@ -70,20 +88,38 @@ const AdminPosts = () => {
     };
 
     const handleDelete = async (id) => {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
-            try {
-                const res = await fetch(`https://jbrbackend.onrender.com/api/posts/${id}`, {
-                    method: 'DELETE'
-                });
-                if (res.ok) {
-                    alert('Post supprimé avec succès !');
-                    setSelectedPost(null);
-                    fetchPosts();
-                }
-            } catch (err) {
-                alert('Erreur lors de la suppression');
+        setPostToDelete(id);
+        setShowDeleteModal(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!postToDelete) return;
+        
+        try {
+            const res = await fetch(`https://jbrbackend.onrender.com/api/posts/${postToDelete}`, {
+                method: 'DELETE'
+            });
+            
+            if (res.ok) {
+                showAlert('Post supprimé avec succès !', 'success');
+                setSelectedPost(null);
+                fetchPosts();
+            } else {
+                const errorData = await res.json();
+                throw new Error(errorData.error || 'Erreur lors de la suppression');
             }
+        } catch (err) {
+            console.error('Delete error:', err);
+            showAlert(`Erreur lors de la suppression: ${err.message}`, 'error');
+        } finally {
+            setShowDeleteModal(false);
+            setPostToDelete(null);
         }
+    };
+
+    const cancelDelete = () => {
+        setShowDeleteModal(false);
+        setPostToDelete(null);
     };
 
     const handleEditPost = (post) => {
@@ -387,6 +423,54 @@ const AdminPosts = () => {
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Alert Component */}
+            {alert.show && (
+                <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${
+                    alert.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                }`}>
+                    <div className="flex items-center gap-3">
+                        <span>{alert.message}</span>
+                        <button 
+                            onClick={() => setAlert({ show: false, message: '', type: 'success' })}
+                            className="ml-auto hover:opacity-80"
+                        >
+                            <X size={16} />
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-3 bg-red-100 rounded-full">
+                                <Trash2 size={24} className="text-red-500" />
+                            </div>
+                            <h3 className="text-xl font-bold text-primary">Confirmer la suppression</h3>
+                        </div>
+                        <p className="text-slate-600 mb-6">
+                            Êtes-vous sûr de vouloir supprimer ce post ? Cette action est irréversible.
+                        </p>
+                        <div className="flex gap-4 justify-end">
+                            <button 
+                                onClick={cancelDelete}
+                                className="px-6 py-2 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-all font-medium"
+                            >
+                                Annuler
+                            </button>
+                            <button 
+                                onClick={confirmDelete}
+                                className="px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all font-medium"
+                            >
+                                Supprimer
+                            </button>
                         </div>
                     </div>
                 </div>
