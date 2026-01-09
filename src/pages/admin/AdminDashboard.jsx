@@ -30,7 +30,7 @@ const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/admin/stats')
+        fetch('http://jbrbackend.onrender.com/api/admin/stats')
             .then(res => res.json())
             .then(data => setStats(data))
             .catch(err => console.error(err));

@@ -25,7 +25,7 @@ const AdminPosts = () => {
     }, []);
 
     const fetchPosts = () => {
-        fetch('http://localhost:5000/api/posts')
+        fetch('http://jbrbackend.onrender.com/api/posts')
             .then(res => res.json())
             .then(data => setPosts(data))
             .catch(err => console.error(err));
@@ -34,7 +34,7 @@ const AdminPosts = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:5000/api/posts', {
+            const res = await fetch('http://jbrbackend.onrender.com/api/posts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newPost)
@@ -53,7 +53,7 @@ const AdminPosts = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`http://localhost:5000/api/posts/${editingPost._id}`, {
+            const res = await fetch(`http://jbrbackend.onrender.com/api/posts/${editingPost._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingPost)
@@ -72,7 +72,7 @@ const AdminPosts = () => {
     const handleDelete = async (id) => {
         if (confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
             try {
-                const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
+                const res = await fetch(`http://jbrbackend.onrender.com/api/posts/${id}`, {
                     method: 'DELETE'
                 });
                 if (res.ok) {
@@ -98,7 +98,7 @@ const AdminPosts = () => {
                 const post = posts.find(p => p._id === postId);
                 if (post) {
                     const updatedComments = post.comments.filter((_, index) => index !== commentIndex);
-                    const res = await fetch(`http://localhost:5000/api/posts/${postId}`, {
+                    const res = await fetch(`http://jbrbackend.onrender.com/api/posts/${postId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ ...post, comments: updatedComments })

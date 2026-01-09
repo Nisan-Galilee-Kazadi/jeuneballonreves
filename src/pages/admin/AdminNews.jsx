@@ -24,7 +24,7 @@ const AdminNews = () => {
     }, []);
 
     const fetchNews = () => {
-        fetch('http://localhost:5000/api/news')
+        fetch('http://jbrbackend.onrender.com/api/news')
             .then(res => res.json())
             .then(data => setNews(data))
             .catch(err => console.error(err));
@@ -35,7 +35,7 @@ const AdminNews = () => {
             'Êtes-vous sûr de vouloir supprimer cette actualité ?',
             async () => {
                 try {
-                    const res = await fetch(`http://localhost:5000/api/news/${id}`, {
+                    const res = await fetch(`http://jbrbackend.onrender.com/api/news/${id}`, {
                         method: 'DELETE'
                     });
                     if (res.ok) {
@@ -59,7 +59,7 @@ const AdminNews = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`http://localhost:5000/api/news/${editingItem._id}`, {
+            const res = await fetch(`http://jbrbackend.onrender.com/api/news/${editingItem._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingItem)
@@ -79,7 +79,7 @@ const AdminNews = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:5000/api/news', {
+            const res = await fetch('http://jbrbackend.onrender.com/api/news', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newItem)

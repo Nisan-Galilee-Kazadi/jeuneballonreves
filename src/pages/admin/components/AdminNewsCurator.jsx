@@ -18,7 +18,7 @@ const AdminNewsCurator = () => {
 
     const fetchExternalNews = () => {
         setLoading(true);
-        fetch('http://localhost:5000/api/admin/aggregate-news')
+        fetch('http://jbrbackend.onrender.com/api/admin/aggregate-news')
             .then(res => res.json())
             .then(data => {
                 setExternalNews(data);
@@ -33,7 +33,7 @@ const AdminNewsCurator = () => {
     const verifySource = async (item) => {
         setVerifyingSource(item.id);
         try {
-            const response = await fetch(`http://localhost:5000/api/verify-source`, {
+            const response = await fetch(`http://jbrbackend.onrender.com/api/verify-source`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url: item.link })
@@ -83,7 +83,7 @@ const AdminNewsCurator = () => {
     const handleImport = async (item) => {
         setImporting(item.id);
         try {
-            const response = await fetch('http://localhost:5000/api/news', {
+            const response = await fetch('http://jbrbackend.onrender.com/api/news', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

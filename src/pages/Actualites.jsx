@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink } from 'lucide-react';
 import Layout from '../components/Layout';
 import { Reveal } from '../components/Reveal';
+import { API_ENDPOINTS } from '../config/api';
 
 const Actualites = () => {
     const [news, setNews] = useState([]);
@@ -14,7 +15,7 @@ const Actualites = () => {
     }, []);
 
     const fetchNews = () => {
-        fetch('http://localhost:5000/api/news')
+        fetch(API_ENDPOINTS.news)
             .then(res => res.json())
             .then(data => setNews(data))
             .catch(err => console.error(err))

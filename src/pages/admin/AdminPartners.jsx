@@ -17,7 +17,7 @@ const AdminPartners = () => {
     }, []);
 
     const fetchPartners = () => {
-        fetch('http://localhost:5000/api/partners')
+        fetch('http://jbrbackend.onrender.com/api/partners')
             .then(res => res.json())
             .then(data => setPartners(data))
             .catch(err => console.error(err));
@@ -26,7 +26,7 @@ const AdminPartners = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:5000/api/partners', {
+            const res = await fetch('http://jbrbackend.onrender.com/api/partners', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newPartner)

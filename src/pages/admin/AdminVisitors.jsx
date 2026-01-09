@@ -10,7 +10,7 @@ const AdminVisitors = () => {
     }, []);
 
     const fetchVisitors = () => {
-        fetch('http://localhost:5000/api/visitors')
+        fetch('http://jbrbackend.onrender.com/api/visitors')
             .then(res => res.json())
             .then(data => setVisitors(data))
             .catch(err => console.error(err))
