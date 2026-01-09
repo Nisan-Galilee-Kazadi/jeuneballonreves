@@ -91,7 +91,7 @@ const AdminPartners = () => {
                                     value={newPartner.logoUrl}
                                     onChange={(e) => setNewPartner({ ...newPartner, logoUrl: e.target.value })}
                                     className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-green-500"
-                                    placeholder="httpss://example.com/logo.png"
+                                    placeholder="https://example.com/logo.png"
                                     required
                                 />
                             </div>
@@ -102,7 +102,7 @@ const AdminPartners = () => {
                                     value={newPartner.website}
                                     onChange={(e) => setNewPartner({ ...newPartner, website: e.target.value })}
                                     className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-green-500"
-                                    placeholder="httpss://example.com"
+                                    placeholder="https://example.com"
                                 />
                             </div>
                         </div>

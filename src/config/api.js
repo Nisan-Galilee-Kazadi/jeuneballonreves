@@ -1,5 +1,5 @@
 // Configuration API pour le client
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'httpss://jbrbackend.onrender.com/api';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://jbrbackend.onrender.com/api';
 
 export const API_ENDPOINTS = {
     // Auth & Users

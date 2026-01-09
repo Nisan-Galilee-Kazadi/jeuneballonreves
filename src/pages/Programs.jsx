@@ -71,7 +71,7 @@ export const JeunesBallonRevesPage = () => (
             "Offrir des opportunités de reconnaissance",
             "Contribuer à la formation de joueurs de haut niveau"
         ]}
-        image="httpss://images.unsplash.com/photo-1520127877028-19363999e063?auto=format&fit=crop&q=80"
+        image="https://images.unsplash.com/photo-1520127877028-19363999e063?auto=format&fit=crop&q=80"
     />
 );
 
@@ -90,6 +90,6 @@ export const LectureMoiPage = () => (
             "Valoriser la lecture comme levier de réussite"
         ]}
         quote="La lecture n'est pas une contrainte, mais une clé. Elle nous construit aujourd'hui et nous maintient demain."
-        image="httpss://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&q=80"
+        image="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&q=80"
     />
 );

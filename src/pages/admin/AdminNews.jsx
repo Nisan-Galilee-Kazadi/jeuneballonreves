@@ -158,7 +158,7 @@ const AdminNews = () => {
                                         value={newItem.sourceUrl}
                                         onChange={(e) => setNewItem({ ...newItem, sourceUrl: e.target.value })}
                                         className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-primary"
-                                        placeholder="httpss://example.com/article"
+                                        placeholder="https://example.com/article"
                                         required={newItem.isExternal}
                                     />
                                 </div>
@@ -294,7 +294,7 @@ const AdminNews = () => {
                                             value={editingItem.sourceUrl || ''}
                                             onChange={(e) => setEditingItem({ ...editingItem, sourceUrl: e.target.value })}
                                             className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-primary"
-                                            placeholder="httpss://example.com/article"
+                                            placeholder="https://example.com/article"
                                             required={editingItem.isExternal}
                                         />
                                     </div>

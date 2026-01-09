@@ -163,7 +163,7 @@ const AdminPosts = () => {
                                     value={newPost.imageUrl}
                                     onChange={(e) => setNewPost({ ...newPost, imageUrl: e.target.value })}
                                     className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-secondary"
-                                    placeholder="httpss://images.unsplash.com/..."
+                                    placeholder="https://images.unsplash.com/..."
                                     required
                                 />
                             </div>
@@ -356,7 +356,7 @@ const AdminPosts = () => {
                                         value={editingPost.imageUrl}
                                         onChange={(e) => setEditingPost({ ...editingPost, imageUrl: e.target.value })}
                                         className="w-full bg-slate-50 border-none rounded-2xl px-4 py-3 focus:ring-2 ring-blue-500"
-                                        placeholder="httpss://images.unsplash.com/..."
+                                        placeholder="https://images.unsplash.com/..."
                                         required
                                     />
                                 </div>
