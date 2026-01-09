@@ -15,10 +15,23 @@ const Actualites = () => {
     }, []);
 
     const fetchNews = () => {
+        setLoading(true);
         fetch(API_ENDPOINTS.news)
-            .then(res => res.json())
-            .then(data => setNews(data))
-            .catch(err => console.error(err))
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                // Ensure data is an array
+                const newsArray = Array.isArray(data) ? data : (data.data || []);
+                setNews(newsArray);
+            })
+            .catch(err => {
+                console.error('Error fetching news:', err);
+                setNews([]); // Set empty array on error
+            })
             .finally(() => setLoading(false));
     };
 
@@ -73,7 +86,7 @@ const Actualites = () => {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {news.length > 0 ? (
+                            {news && news.length > 0 ? (
                                 news.map((item, index) => (
                                     <motion.div
                                         key={item._id}

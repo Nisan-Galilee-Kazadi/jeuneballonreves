@@ -58,9 +58,7 @@ export const reactToPost = (id, type) => api.post(`/posts/${id}/react`, { type }
 export const deletePost = (id) => api.delete(`/posts/${id}`);
 
 // Admin routes
-export const aggregateNews = () => api.get('/news/aggregate'); // Route publique
-export const aggregateNewsAdmin = () => api.get('/admin/aggregate-news'); // Route admin
+export const aggregateNews = () => api.get('/admin/aggregate-news');
 export const verifyRSSSource = (url) => api.post('/admin/verify-source', { url });
-export const getAdminStats = () => api.get('/admin/stats');
 
 export default api;

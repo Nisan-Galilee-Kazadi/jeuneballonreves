@@ -29,7 +29,8 @@ const Blog = () => {
         const fetchPosts = async () => {
             try {
                 const response = await getPosts();
-                const blogPosts = response.data.filter(p => p.type === 'blog' || p.type === 'instagram');
+                const responseData = response.data || [];
+                const blogPosts = responseData.filter(p => p.type === 'blog' || p.type === 'instagram');
 
                 // Mark posts as liked based on localStorage
                 // NOTE: We do not overwrite likes count from localStorage, we trust backend for count
@@ -42,6 +43,7 @@ const Blog = () => {
                 setPosts(postsWithLikes);
             } catch (err) {
                 console.error(err);
+                setPosts([]); // Set empty array on error
             } finally {
                 setLoading(false);
             }
@@ -224,7 +226,7 @@ const Blog = () => {
                         <div className="flex gap-8">
                             {/* Main Feed - Single Column */}
                             <div className="flex-1 max-w-2xl mx-auto lg:mx-0 space-y-8">
-                                {posts.length > 0 ? (
+                                {posts && posts.length > 0 ? (
                                     posts.map((post) => (
                                         <Reveal key={post._id} width="100%">
                                             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">

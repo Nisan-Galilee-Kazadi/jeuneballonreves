@@ -31,9 +31,33 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         fetch('https://jbrbackend.onrender.com/api/admin/stats')
-            .then(res => res.json())
-            .then(data => setStats(data))
-            .catch(err => console.error(err));
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                // Ensure stats has default values
+                setStats({
+                    posts: data.posts || 0,
+                    news: data.news || 0,
+                    partners: data.partners || 0,
+                    engagement: data.engagement || 0,
+                    recentActivity: data.recentActivity || []
+                });
+            })
+            .catch(err => {
+                console.error('Error fetching stats:', err);
+                // Set default stats on error
+                setStats({
+                    posts: 0,
+                    news: 0,
+                    partners: 0,
+                    engagement: 0,
+                    recentActivity: []
+                });
+            });
     }, []);
 
     if (!stats) return <div className="p-8 text-primary font-bold animate-pulse">Chargement des statistiques...</div>;
@@ -67,7 +91,8 @@ const AdminDashboard = () => {
                                 <button className="text-xs font-bold text-secondary uppercase tracking-widest hover:underline">Voir tout</button>
                             </div>
                             <div className="space-y-6 overflow-x-hidden">
-                                {stats.recentActivity.map((post, i) => (
+                                {stats.recentActivity && stats.recentActivity.length > 0 ? (
+                                    stats.recentActivity.map((post, i) => (
                                     <div key={i} className="flex items-center justify-between border-b border-slate-50 pb-4 last:border-0 last:pb-0 min-w-0">
                                         <div className="flex items-center gap-4 min-w-0 flex-1">
                                             <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
@@ -89,7 +114,12 @@ const AdminDashboard = () => {
                                             </span>
                                         </div>
                                     </div>
-                                ))}
+                                ))
+                            ) : (
+                                <div className="text-center py-8">
+                                    <p className="text-slate-400 text-sm">Aucune activité récente</p>
+                                </div>
+                            )}
                             </div>
                         </div>
                     </div>
