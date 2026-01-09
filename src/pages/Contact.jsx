@@ -71,7 +71,7 @@ const Contact = () => {
         e.preventDefault();
         setSubmitting(true);
         try {
-            const res = await fetch(API_ENDPOINTS.messages, {
+            const res = await fetch('http://jbrbackend.onrender.com/api/messages', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

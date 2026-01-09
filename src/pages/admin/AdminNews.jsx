@@ -3,7 +3,6 @@ import { Newspaper, Send, Plus, Trash2, Calendar, User, Search, Eye, Edit, Save,
 import AdminNewsCurator from './components/AdminNewsCurator';
 import { useAlertContext } from '../../components/AlertProvider';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { API_ENDPOINTS } from '../../config/api';
 
 const AdminNews = () => {
     const [news, setNews] = useState([]);
@@ -25,9 +24,9 @@ const AdminNews = () => {
     }, []);
 
     const fetchNews = () => {
-        fetch(API_ENDPOINTS.news)
+        fetch('http://jbrbackend.onrender.com/api/news')
             .then(res => res.json())
-            .then(data => setNews(data.success ? data.data : []))
+            .then(data => setNews(data))
             .catch(err => console.error(err));
     };
 
@@ -36,7 +35,7 @@ const AdminNews = () => {
             'Êtes-vous sûr de vouloir supprimer cette actualité ?',
             async () => {
                 try {
-                    const res = await fetch(`${API_ENDPOINTS.news}/${id}`, {
+                    const res = await fetch(`http://jbrbackend.onrender.com/api/news/${id}`, {
                         method: 'DELETE'
                     });
                     if (res.ok) {
@@ -60,7 +59,7 @@ const AdminNews = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`${API_ENDPOINTS.news}/${editingItem._id}`, {
+            const res = await fetch(`http://jbrbackend.onrender.com/api/news/${editingItem._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingItem)
@@ -80,7 +79,7 @@ const AdminNews = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(API_ENDPOINTS.news, {
+            const res = await fetch('http://jbrbackend.onrender.com/api/news', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newItem)

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Camera, Send, Plus, Trash2, Heart, MessageCircle, MoreVertical, Eye, Edit, X, Save } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { API_ENDPOINTS } from '../../config/api';
 
 const AdminPosts = () => {
     const [posts, setPosts] = useState([]);
@@ -26,16 +25,16 @@ const AdminPosts = () => {
     }, []);
 
     const fetchPosts = () => {
-        fetch(API_ENDPOINTS.posts)
+        fetch('http://jbrbackend.onrender.com/api/posts')
             .then(res => res.json())
-            .then(data => setPosts(data.success ? data.data : []))
+            .then(data => setPosts(data))
             .catch(err => console.error(err));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(API_ENDPOINTS.posts, {
+            const res = await fetch('http://jbrbackend.onrender.com/api/posts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newPost)
@@ -54,7 +53,7 @@ const AdminPosts = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`${API_ENDPOINTS.posts}/${editingPost._id}`, {
+            const res = await fetch(`http://jbrbackend.onrender.com/api/posts/${editingPost._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingPost)
@@ -73,7 +72,7 @@ const AdminPosts = () => {
     const handleDelete = async (id) => {
         if (confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
             try {
-                const res = await fetch(`${API_ENDPOINTS.posts}/${id}`, {
+                const res = await fetch(`http://jbrbackend.onrender.com/api/posts/${id}`, {
                     method: 'DELETE'
                 });
                 if (res.ok) {
@@ -99,7 +98,7 @@ const AdminPosts = () => {
                 const post = posts.find(p => p._id === postId);
                 if (post) {
                     const updatedComments = post.comments.filter((_, index) => index !== commentIndex);
-                    const res = await fetch(`${API_ENDPOINTS.posts}/${postId}`, {
+                    const res = await fetch(`http://jbrbackend.onrender.com/api/posts/${postId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ ...post, comments: updatedComments })

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Plus, Trash2, Edit, ExternalLink, Globe } from 'lucide-react';
+import { Handshake, Plus, Trash2, Globe, Bookmark } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { API_ENDPOINTS } from '../../config/api';
 
 const AdminPartners = () => {
     const [partners, setPartners] = useState([]);
@@ -18,7 +17,7 @@ const AdminPartners = () => {
     }, []);
 
     const fetchPartners = () => {
-        fetch(API_ENDPOINTS.partners)
+        fetch('http://jbrbackend.onrender.com/api/partners')
             .then(res => res.json())
             .then(data => setPartners(data))
             .catch(err => console.error(err));
@@ -27,7 +26,7 @@ const AdminPartners = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(API_ENDPOINTS.partners, {
+            const res = await fetch('http://jbrbackend.onrender.com/api/partners', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newPartner)
