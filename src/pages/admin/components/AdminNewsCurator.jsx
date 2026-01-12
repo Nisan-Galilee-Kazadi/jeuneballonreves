@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, Plus, Check, RefreshCw, ExternalLink, Copy, Image, Shield, AlertCircle } from 'lucide-react';
 import { useAlertContext } from '../../../components/AlertProvider';
+import api, { aggregateNews, verifyRSSSource } from '../../../api';
 
 const AdminNewsCurator = () => {
     const [externalNews, setExternalNews] = useState([]);
@@ -18,14 +19,16 @@ const AdminNewsCurator = () => {
 
     const fetchExternalNews = () => {
         setLoading(true);
-        fetch('https://jbrbackend.onrender.com/api/admin/aggregate-news')
-            .then(res => res.json())
-            .then(data => {
-                setExternalNews(data);
+        aggregateNews()
+            .then(res => {
+                // L'API renvoie { success: true, count: X, data: [...] }
+                const data = res.data;
+                setExternalNews(data.data || []);
                 setLoading(false);
             })
             .catch(err => {
                 console.error(err);
+                alert.error("Impossible de récupérer les actualités distantes");
                 setLoading(false);
             });
     };
@@ -33,12 +36,8 @@ const AdminNewsCurator = () => {
     const verifySource = async (item) => {
         setVerifyingSource(item.id);
         try {
-            const response = await fetch(`https://jbrbackend.onrender.com/api/verify-source`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: item.link })
-            });
-            const data = await response.json();
+            const res = await verifyRSSSource(item.link);
+            const data = res.data;
             setSourceStatus(prev => ({
                 ...prev,
                 [item.id]: {
@@ -73,7 +72,7 @@ const AdminNewsCurator = () => {
     };
 
     const saveImageUpdate = (item) => {
-        setExternalNews(prev => prev.map(news => 
+        setExternalNews(prev => prev.map(news =>
             news.id === item.id ? { ...news, imageUrl: customImageUrl } : news
         ));
         setEditingImage(null);
@@ -83,30 +82,26 @@ const AdminNewsCurator = () => {
     const handleImport = async (item) => {
         setImporting(item.id);
         try {
-            const response = await fetch('https://jbrbackend.onrender.com/api/news', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    title: item.title,
-                    content: item.summary,
-                    imageUrl: item.imageUrl,
-                    category: item.category || 'Général',
-                    author: 'Admin',
-                    isExternal: true,
-                    sourceUrl: item.link
-                })
+            // Utilisation de l'instance api pour le POST vers /news
+            const response = await api.post('/news', {
+                title: item.title,
+                content: item.summary,
+                imageUrl: item.imageUrl,
+                category: item.category || 'Général',
+                author: 'Admin',
+                isExternal: true,
+                sourceUrl: item.link
             });
 
-            if (response.ok) {
+            if (response.status === 201 || response.status === 200) {
                 alert.success('Nouvelle importée avec succès !');
-                setExternalNews(prev => prev.filter(n => n.id !== item.id));
+                setExternalNews(prev => prev.filter(n => (n.id !== item.id && n.link !== item.link)));
             } else {
-                const errorData = await response.json();
-                alert.error(`Erreur: ${errorData.message || 'Impossible d\'importer'}`);
+                alert.error(`Erreur: Impossible d'importer`);
             }
         } catch (err) {
             console.error(err);
-            alert.error('Erreur réseau lors de l\'import');
+            alert.error(err.message || 'Erreur lors de l\'import');
         } finally {
             setImporting(null);
         }
@@ -148,8 +143,8 @@ const AdminNewsCurator = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto max-h-[750px] pr-2 scrollbar-thin scrollbar-thumb-slate-200">
                     {externalNews.length > 0 ? (
-                        externalNews.map((item) => (
-                            <div key={item.id} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 group relative w-full h-full min-h-[320px] flex flex-col max-w-sm mx-auto">
+                        externalNews.map((item, index) => (
+                            <div key={`news-${index}-${item.id || item.link}`} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 group relative w-full h-full min-h-[320px] flex flex-col max-w-sm mx-auto">
                                 {/* Image en haut */}
                                 <div className="h-48 overflow-hidden relative flex-shrink-0">
                                     {item.imageUrl ? (
@@ -194,7 +189,7 @@ const AdminNewsCurator = () => {
                                     </div>
                                     <h4 className="text-sm font-black text-primary uppercase italic tracking-tighter line-clamp-2 mb-2">{item.title}</h4>
                                     <p className="text-slate-500 text-xs line-clamp-2 mb-4 leading-relaxed">{item.summary}</p>
-                                    
+
                                     {/* Image Update Section */}
                                     {editingImage === item.id ? (
                                         <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">

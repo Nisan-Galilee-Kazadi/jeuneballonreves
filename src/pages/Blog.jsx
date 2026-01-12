@@ -283,8 +283,20 @@ const Blog = () => {
                                                         <div className="space-y-3 pt-3 border-t border-slate-100">
                                                             {post.comments && post.comments.length > 0 ? (
                                                                 post.comments.map((comment, idx) => (
-                                                                    <div key={idx} className="text-sm">
-                                                                        <span className="font-bold text-primary mr-2">{comment.user}</span>
+                                                                    <div key={idx} className={`text-sm ${comment.isReply ? 'ml-6 pl-4 border-l-2 border-blue-200' : ''}`}>
+                                                                        <div className="flex items-center gap-2 mb-1">
+                                                                            <span className="font-bold text-primary">{comment.user}</span>
+                                                                            {comment.isReply && (
+                                                                                <span className="text-[9px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">
+                                                                                    Réponse à {comment.replyTo}
+                                                                                </span>
+                                                                            )}
+                                                                            {comment.user === 'Admin' && (
+                                                                                <span className="text-[9px] text-green-500 bg-green-50 px-2 py-0.5 rounded-full">
+                                                                                    Admin
+                                                                                </span>
+                                                                            )}
+                                                                        </div>
                                                                         <span className="text-slate-700">{comment.text}</span>
                                                                     </div>
                                                                 ))

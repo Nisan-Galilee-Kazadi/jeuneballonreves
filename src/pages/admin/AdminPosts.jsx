@@ -10,6 +10,12 @@ const AdminPosts = () => {
     const [isCreating, setIsCreating] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [replyingTo, setReplyingTo] = useState(null); // { postId, commentIndex, user }
+    const [replyText, setReplyText] = useState('');
+    const [isSubmittingReply, setIsSubmittingReply] = useState(false);
     const [editingPost, setEditingPost] = useState({
         title: '',
         caption: '',
@@ -36,6 +42,9 @@ const AdminPosts = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
+        
+        setIsSubmitting(true);
         try {
             const res = await fetch('https://jbrbackend.onrender.com/api/posts', {
                 method: 'POST',
@@ -43,18 +52,24 @@ const AdminPosts = () => {
                 body: JSON.stringify(newPost)
             });
             if (res.ok) {
-                alert('Post créé avec succès !');
+                const createdPost = await res.json();
+                setPosts([createdPost, ...posts]);
+                alert.success('Post créé avec succès !');
                 setIsCreating(false);
                 setNewPost({ title: '', caption: '', imageUrl: '', type: 'blog' });
-                fetchPosts();
             }
         } catch (err) {
-            alert('Erreur lors de la création');
+            alert.error('Erreur lors de la création');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+        if (isUpdating) return;
+        
+        setIsUpdating(true);
         try {
             const res = await fetch(`https://jbrbackend.onrender.com/api/posts/${editingPost._id}`, {
                 method: 'PUT',
@@ -62,20 +77,25 @@ const AdminPosts = () => {
                 body: JSON.stringify(editingPost)
             });
             if (res.ok) {
-                alert('Post mis à jour avec succès !');
+                alert.success('Post mis à jour avec succès !');
                 setIsEditing(false);
                 setEditingPost({ title: '', caption: '', imageUrl: '', type: 'blog' });
                 fetchPosts();
             }
         } catch (err) {
-            alert('Erreur lors de la mise à jour');
+            alert.error('Erreur lors de la mise à jour');
+        } finally {
+            setIsUpdating(false);
         }
     };
 
     const handleDelete = async (id) => {
+        if (isDeleting) return;
+        
         alert.confirm(
             'Êtes-vous sûr de vouloir supprimer ce post ?',
             async () => {
+                setIsDeleting(true);
                 try {
                     await deletePost(id);
                     alert.success('Post supprimé avec succès !');
@@ -83,6 +103,8 @@ const AdminPosts = () => {
                     fetchPosts();
                 } catch (err) {
                     alert.error('Erreur lors de la suppression');
+                } finally {
+                    setIsDeleting(false);
                 }
             }
         );
@@ -92,6 +114,52 @@ const AdminPosts = () => {
         setEditingPost(post);
         setIsEditing(true);
         setSelectedPost(null);
+    };
+
+    const handleReply = async (postId, commentIndex, user) => {
+        if (isSubmittingReply || !replyText.trim()) return;
+        
+        setIsSubmittingReply(true);
+        try {
+            const post = posts.find(p => p._id === postId);
+            if (post) {
+                const updatedComments = [...post.comments];
+                const reply = {
+                    user: 'Admin',
+                    text: replyText.trim(),
+                    timestamp: new Date().toISOString(),
+                    isReply: true,
+                    replyTo: user
+                };
+                
+                // Ajouter la réponse après le commentaire original
+                updatedComments.splice(commentIndex + 1, 0, reply);
+                
+                const res = await fetch(`https://jbrbackend.onrender.com/api/posts/${postId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...post, comments: updatedComments })
+                });
+                
+                if (res.ok) {
+                    alert.success('Réponse ajoutée avec succès !');
+                    setReplyText('');
+                    setReplyingTo(null);
+                    fetchPosts();
+                    
+                    // Mettre à jour le post sélectionné si le modal est ouvert
+                    if (selectedPost && selectedPost._id === postId) {
+                        setSelectedPost({ ...selectedPost, comments: updatedComments });
+                    }
+                } else {
+                    alert.error('Erreur lors de l\'ajout de la réponse');
+                }
+            }
+        } catch (err) {
+            alert.error('Erreur réseau lors de la réponse');
+        } finally {
+            setIsSubmittingReply(false);
+        }
     };
 
     const handleDeleteComment = async (postId, commentIndex) => {
@@ -146,7 +214,13 @@ const AdminPosts = () => {
             </div>
 
             {isCreating && (
-                <div className="bg-white p-8 rounded-3xl shadow-xl border border-secondary/20 max-w-2xl animate-fade-in">
+                <div className="bg-white p-8 rounded-3xl shadow-xl border border-secondary/20 max-w-2xl animate-fade-in relative">
+                    <button
+                        onClick={() => setIsCreating(false)}
+                        className="absolute top-4 right-4 w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 transition-all"
+                    >
+                        <X size={16} />
+                    </button>
                     <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-primary uppercase italic tracking-tighter">
                         <Camera className="text-secondary" /> Créer un nouveau post
                     </h2>
@@ -185,9 +259,14 @@ const AdminPosts = () => {
                                 required
                             ></textarea>
                         </div>
-                        <div className="md:col-span-2 flex gap-4 mt-2">
-                            <button type="submit" className="flex-1 bg-primary text-white py-4 rounded-2xl font-black italic uppercase tracking-[0.2em] shadow-lg">Publier Maintenant</button>
-                            <button onClick={() => setIsCreating(false)} className="px-8 bg-slate-100 text-slate-500 rounded-2xl font-bold uppercase text-xs tracking-widest">Annuler</button>
+                        <div className="md:col-span-2 mt-2">
+                            <button 
+                                type="submit" 
+                                className="w-full bg-primary text-white py-4 rounded-2xl font-black italic uppercase tracking-[0.2em] shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={newPost.title === '' || newPost.caption === '' || newPost.imageUrl === '' || isSubmitting}
+                            >
+                                {isSubmitting ? 'Publication en cours...' : 'Publier Maintenant'}
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -277,32 +356,85 @@ const AdminPosts = () => {
 
                                 <div>
                                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-300 mb-4">Fil des commentaires</p>
-                                    <div className="max-h-48 overflow-y-auto space-y-3 custom-scrollbar">
+                                    <div className="max-h-64 overflow-y-auto space-y-3 custom-scrollbar">
                                         {selectedPost.comments && selectedPost.comments.length > 0 ? (
-                                            selectedPost.comments.slice(0, 2).map((comm, idx) => (
-                                                <div key={idx} className="bg-slate-50 p-3 rounded-2xl flex flex-col group">
+                                            selectedPost.comments.map((comm, idx) => (
+                                                <div key={idx} className={`bg-slate-50 p-3 rounded-2xl flex flex-col group ${comm.isReply ? 'ml-6 border-l-2 border-blue-200' : ''}`}>
                                                     <div className="flex justify-between items-start">
                                                         <div className="flex-1">
-                                                            <p className="text-xs font-bold text-primary">{comm.user || "Anonyme"}</p>
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <p className="text-xs font-bold text-primary">{comm.user || "Anonyme"}</p>
+                                                                {comm.isReply && (
+                                                                    <span className="text-[9px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">
+                                                                        Réponse à {comm.replyTo}
+                                                                    </span>
+                                                                )}
+                                                                {comm.user === 'Admin' && (
+                                                                    <span className="text-[9px] text-green-500 bg-green-50 px-2 py-0.5 rounded-full">
+                                                                        Admin
+                                                                    </span>
+                                                                )}
+                                                            </div>
                                                             <p className="text-xs text-slate-500 italic mt-1">{comm.text}</p>
                                                         </div>
                                                         <button 
                                                             onClick={() => handleDeleteComment(selectedPost._id, idx)}
-                                                            className="text-slate-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all ml-3 flex-shrink-0"
+                                                            className="text-slate-300 hover:text-red-400 transition-all ml-3 flex-shrink-0"
                                                             title="Supprimer le commentaire"
                                                         >
                                                             <Trash2 size={12} />
                                                         </button>
                                                     </div>
+                                                    
+                                                    {/* Bouton de réponse pour les commentaires non-admin */}
+                                                    {!comm.isReply && comm.user !== 'Admin' && (
+                                                        <div className="mt-2 pt-2 border-t border-slate-100">
+                                                            {replyingTo?.postId === selectedPost._id && replyingTo?.commentIndex === idx ? (
+                                                                <div className="space-y-2">
+                                                                    <textarea
+                                                                        value={replyText}
+                                                                        onChange={(e) => setReplyText(e.target.value)}
+                                                                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs resize-none h-16 focus:ring-2 ring-blue-500 focus:border-blue-500"
+                                                                        style={{ 
+                                                                            textTransform: 'capitalize',
+                                                                            fontSize: '12px'
+                                                                        }}
+                                                                        placeholder="Écrire une réponse..."
+                                                                        disabled={isSubmittingReply}
+                                                                    />
+                                                                    <div className="flex gap-2">
+                                                                        <button
+                                                                            onClick={() => handleReply(selectedPost._id, idx, comm.user)}
+                                                                            className="text-[9px] bg-blue-500 text-white px-3 py-1 rounded-md font-bold uppercase disabled:opacity-50"
+                                                                            disabled={isSubmittingReply || !replyText.trim()}
+                                                                        >
+                                                                            {isSubmittingReply ? 'Envoi...' : 'Répondre'}
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                setReplyingTo(null);
+                                                                                setReplyText('');
+                                                                            }}
+                                                                            className="text-[9px] bg-slate-100 text-slate-500 px-3 py-1 rounded-md font-bold uppercase"
+                                                                        >
+                                                                            Annuler
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => setReplyingTo({ postId: selectedPost._id, commentIndex: idx, user: comm.user })}
+                                                                    className="text-[9px] text-blue-500 hover:text-blue-600 font-medium flex items-center gap-1"
+                                                                >
+                                                                    <MessageCircle size={10} /> Répondre
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             ))
                                         ) : (
                                             <p className="text-xs text-slate-400 italic font-medium py-4">Aucun commentaire pour le moment.</p>
-                                        )}
-                                        {selectedPost.comments && selectedPost.comments.length > 2 && (
-                                            <p className="text-xs text-slate-400 italic font-medium text-center py-2">
-                                                +{selectedPost.comments.length - 2} autres commentaires...
-                                            </p>
                                         )}
                                     </div>
                                 </div>
@@ -311,22 +443,25 @@ const AdminPosts = () => {
                             <div className="pt-8 mt-8 border-t border-slate-100 flex gap-4 justify-center">
                                 <button 
                                     onClick={() => setSelectedPost(null)}
-                                    className="p-3 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-all"
+                                    className="p-3 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     title="Masquer"
+                                    disabled={isDeleting || isUpdating}
                                 >
                                     <X size={20} />
                                 </button>
                                 <button 
                                     onClick={() => handleEditPost(selectedPost)}
-                                    className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all"
+                                    className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     title="Mettre à jour"
+                                    disabled={isDeleting || isUpdating}
                                 >
                                     <Edit size={20} />
                                 </button>
                                 <button 
                                     onClick={() => handleDelete(selectedPost._id)}
-                                    className="p-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all"
+                                    className="p-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     title="Supprimer"
+                                    disabled={isDeleting || isUpdating}
                                 >
                                     <Trash2 size={20} />
                                 </button>
@@ -380,17 +515,19 @@ const AdminPosts = () => {
                                 <div className="flex gap-4 mt-6 justify-center">
                                     <button 
                                         onClick={() => setIsEditing(false)} 
-                                        className="p-3 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-all"
+                                        className="p-3 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                         title="Annuler"
+                                        disabled={isUpdating}
                                     >
                                         <X size={20} />
                                     </button>
                                     <button 
                                         type="submit" 
-                                        className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all"
+                                        className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                         title="Mettre à jour"
+                                        disabled={isUpdating}
                                     >
-                                        <Save size={20} />
+                                        {isUpdating ? 'Mise à jour...' : <Save size={20} />}
                                     </button>
                                 </div>
                             </form>
