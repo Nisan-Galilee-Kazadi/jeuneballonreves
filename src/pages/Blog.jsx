@@ -15,6 +15,7 @@ const Blog = () => {
     const [pendingCommentPostId, setPendingCommentPostId] = useState(null);
     const [visitorName, setVisitorName] = useState('');
     const [tempName, setTempName] = useState('');
+    const [replyingToComment, setReplyingToComment] = useState(null);
 
     useEffect(() => {
         // Load visitor name from localStorage
@@ -174,6 +175,49 @@ const Blog = () => {
         }
     };
 
+    // Reply to specific comment
+    const handleReplyToComment = async (postId, replyToUser, replyText, commentIndex) => {
+        if (!replyText.trim()) return;
+
+        const reply = {
+            user: visitorName || "Visiteur",
+            text: replyText.trim(),
+            createdAt: new Date(),
+            isReply: true,
+            replyTo: replyToUser
+        };
+
+        // Optimistic update
+        setPosts(prevPosts => prevPosts.map(post => {
+            if (post._id === postId) {
+                const updatedComments = [...(post.comments || [])];
+                updatedComments.splice(commentIndex + 1, 0, reply);
+                return {
+                    ...post,
+                    comments: updatedComments
+                };
+            }
+            return post;
+        }));
+
+        // Clear the reply input
+        setCommentInputs(prev => ({ ...prev, [`reply-${replyToUser}-${commentIndex}`]: '' }));
+        setReplyingToComment(null);
+
+        // Backend sync
+        try {
+            await fetch(`https://jbrbackend.onrender.com/api/posts/${postId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    comments: [...(posts.find(p => p._id === postId)?.comments || []), reply]
+                })
+            });
+        } catch (err) {
+            console.error('Error adding reply:', err);
+        }
+    };
+
     return (
         <Layout>
             <div className="pt-32 pb-20 px-4 bg-slate-50 min-h-screen">
@@ -280,46 +324,101 @@ const Blog = () => {
 
                                                     {/* Comments Section */}
                                                     {showComments[post._id] && (
-                                                        <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                        <div className="space-y-4 pt-3 border-t border-slate-100">
                                                             {post.comments && post.comments.length > 0 ? (
                                                                 post.comments.map((comment, idx) => (
-                                                                    <div key={idx} className={`text-sm ${comment.isReply ? 'ml-6 pl-4 border-l-2 border-blue-200' : ''}`}>
-                                                                        <div className="flex items-center gap-2 mb-1">
-                                                                            <span className="font-bold text-primary">{comment.user}</span>
-                                                                            {comment.isReply && (
-                                                                                <span className="text-[9px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">
-                                                                                    Réponse à {comment.replyTo}
-                                                                                </span>
-                                                                            )}
-                                                                            {comment.user === 'Admin' && (
-                                                                                <span className="text-[9px] text-green-500 bg-green-50 px-2 py-0.5 rounded-full">
-                                                                                    Admin
-                                                                                </span>
+                                                                    <div key={idx} className="space-y-2">
+                                                                        <div className={`bg-white rounded-lg p-3 border ${comment.isReply ? 'ml-8 border-l-3 border-blue-300' : 'border-slate-100'}`}>
+                                                                            <div className="flex items-start gap-3">
+                                                                                <div className={`w-8 h-8 ${comment.isReply ? 'bg-blue-500' : 'bg-primary'} rounded-full flex items-center justify-center flex-shrink-0`}>
+                                                                                    <span className="text-white text-xs font-bold">
+                                                                                        {comment.user ? comment.user.charAt(0).toUpperCase() : 'V'}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <div className="flex-1">
+                                                                                    <div className="flex items-center gap-2 mb-1">
+                                                                                        <span className="font-bold text-primary text-sm">{comment.user}</span>
+                                                                                        {comment.isReply && (
+                                                                                            <span className="text-[9px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">
+                                                                                                Réponse à {comment.replyTo}
+                                                                                            </span>
+                                                                                        )}
+                                                                                        {comment.user === 'Admin' && (
+                                                                                            <span className="text-[9px] text-green-500 bg-green-50 px-2 py-0.5 rounded-full">
+                                                                                                Admin
+                                                                                            </span>
+                                                                                        )}
+                                                                                        <span className="text-[10px] text-slate-400">
+                                                                                            {new Date(comment.createdAt || comment.timestamp).toLocaleDateString()}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <p className="text-slate-700 text-sm leading-relaxed">{comment.text}</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        
+                                                                            {/* Bouton répondre pour les commentaires non-admin */}
+                                                                            {!comment.isReply && comment.user !== 'Admin' && (
+                                                                                <div className="flex items-center gap-3 mt-2 ml-11">
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            setCommentInputs({ ...commentInputs, [`reply-${comment.user}-${idx}`]: '' });
+                                                                                            setReplyingToComment({ postId: post._id, commentUser: comment.user, commentIndex: idx });
+                                                                                        }}
+                                                                                        className="text-[11px] text-blue-500 hover:text-blue-600 font-medium flex items-center gap-1"
+                                                                                    >
+                                                                                        <MessageCircle size={12} /> Répondre
+                                                                                    </button>
+                                                                                </div>
                                                                             )}
                                                                         </div>
-                                                                        <span className="text-slate-700">{comment.text}</span>
+                                                                        
+                                                                        {/* Formulaire de réponse */}
+                                                                        {replyingToComment?.postId === post._id && replyingToComment?.commentUser === comment.user && replyingToComment?.commentIndex === idx && (
+                                                                            <div className="ml-8 mt-2">
+                                                                                <div className="bg-white rounded-lg p-3 border border-blue-200">
+                                                                                    <div className="flex gap-2">
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            value={commentInputs[`reply-${comment.user}-${idx}`] || ''}
+                                                                                            onChange={(e) => setCommentInputs({ ...commentInputs, [`reply-${comment.user}-${idx}`]: e.target.value })}
+                                                                                            onKeyPress={(e) => e.key === 'Enter' && handleReplyToComment(post._id, comment.user, commentInputs[`reply-${comment.user}-${idx}`], idx)}
+                                                                                            placeholder={`Répondre à ${comment.user}...`}
+                                                                                            className="flex-1 bg-slate-50 border border-slate-200 rounded-full px-4 py-2 text-sm focus:ring-2 ring-blue-500 focus:border-blue-500"
+                                                                                        />
+                                                                                        <button
+                                                                                            onClick={() => handleReplyToComment(post._id, comment.user, commentInputs[`reply-${comment.user}-${idx}`], idx)}
+                                                                                            className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-all"
+                                                                                        >
+                                                                                            <Send size={16} />
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
                                                                     </div>
                                                                 ))
                                                             ) : (
                                                                 <p className="text-xs text-slate-400 italic">Aucun commentaire pour le moment.</p>
                                                             )}
 
-                                                            {/* Add Comment */}
-                                                            <div className="flex gap-2 pt-2">
-                                                                <input
-                                                                    type="text"
-                                                                    value={commentInputs[post._id] || ''}
-                                                                    onChange={(e) => setCommentInputs({ ...commentInputs, [post._id]: e.target.value })}
-                                                                    onKeyPress={(e) => e.key === 'Enter' && handleCommentClick(post._id)}
-                                                                    placeholder="Ajouter un commentaire..."
-                                                                    className="flex-1 bg-slate-50 border-none rounded-full px-4 py-2 text-sm focus:ring-2 ring-secondary"
-                                                                />
-                                                                <button
-                                                                    onClick={() => handleCommentClick(post._id)}
-                                                                    className="bg-secondary text-primary p-2 rounded-full hover:bg-primary hover:text-secondary transition-all"
-                                                                >
-                                                                    <Send size={18} />
-                                                                </button>
+                                                            {/* Ajouter un nouveau commentaire */}
+                                                            <div className="mt-4 pt-4 border-t border-slate-100">
+                                                                <div className="flex gap-2">
+                                                                    <input
+                                                                        type="text"
+                                                                        value={commentInputs[post._id] || ''}
+                                                                        onChange={(e) => setCommentInputs({ ...commentInputs, [post._id]: e.target.value })}
+                                                                        onKeyPress={(e) => e.key === 'Enter' && handleCommentClick(post._id)}
+                                                                        placeholder="Ajouter un commentaire..."
+                                                                        className="flex-1 bg-slate-50 border-none rounded-full px-4 py-2 text-sm focus:ring-2 ring-secondary"
+                                                                    />
+                                                                    <button
+                                                                        onClick={() => handleCommentClick(post._id)}
+                                                                        className="bg-secondary text-primary p-2 rounded-full hover:bg-primary hover:text-secondary transition-all"
+                                                                    >
+                                                                        <Send size={18} />
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     )}
